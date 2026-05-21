@@ -17,6 +17,7 @@ interface ProductModalProps {
 export default function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const { addItem, setIsCartOpen } = useCart();
   const { lang, t } = useLanguage();
+  const [displayProduct, setDisplayProduct] = useState<Product | null>(product);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -24,6 +25,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
   useEffect(() => {
     if (product) {
+      setDisplayProduct(product);
       setCurrentImageIndex(0);
       setSelectedSize(product.sizes[0]);
       setQuantity(1);
@@ -72,24 +74,28 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
     };
   }, [isOpen]);
 
-  if (!product || !selectedSize) return null;
+  const p = product || displayProduct;
+  const size = selectedSize || p?.sizes[0];
+  const safeImageIndex = p && p.images.length > currentImageIndex ? currentImageIndex : 0;
+
+  if (!p || !size) return null;
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+    setCurrentImageIndex((prev) => (prev + 1) % p.images.length);
   };
 
   const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+    setCurrentImageIndex((prev) => (prev - 1 + p.images.length) % p.images.length);
   };
 
   const handleAddToCart = () => {
-    addItem(product, selectedSize, quantity, false);
+    addItem(p, size, quantity, false);
     setAddedFeedback(true);
     setTimeout(() => setAddedFeedback(false), 1500);
   };
 
   const handleBuyNow = () => {
-    addItem(product, selectedSize, quantity, false);
+    addItem(p, size, quantity, false);
     handleClose();
     setTimeout(() => {
       setIsCartOpen(true);
@@ -133,9 +139,9 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             {/* Image section - fixed height on mobile, fills half on desktop */}
             <div className="relative w-full md:w-[45%] h-[280px] sm:h-[340px] md:h-auto md:min-h-[480px] bg-neutral-100 dark:bg-black flex-shrink-0">
               <AnimatePresence>
-                {product.images[currentImageIndex] && (
+                {p.images[safeImageIndex] && (
                   <motion.div
-                    key={currentImageIndex}
+                    key={safeImageIndex}
                     initial={{ opacity: 0, scale: 1.05 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
@@ -143,8 +149,8 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     className="absolute inset-0"
                   >
                     <Image
-                      src={product.images[currentImageIndex]}
-                      alt={product.name[lang]}
+                      src={p.images[safeImageIndex]}
+                      alt={p.name[lang]}
                       fill
                       priority
                       sizes="(max-width: 768px) 100vw, 50vw"
@@ -156,13 +162,13 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
               {/* Preload adjacent images */}
               <div className="hidden">
-                {product.images.map((img) => (
+                {p.images.map((img) => (
                   <Image key={`preload-${img}`} src={img} alt="preload" width={1} height={1} priority />
                 ))}
               </div>
 
               {/* Nav arrows */}
-              {product.images.length > 1 && (
+              {p.images.length > 1 && (
                 <>
                   <button
                     onClick={lang === "ar" ? handleNextImage : handlePrevImage}
@@ -182,14 +188,14 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               )}
 
               {/* Image dots */}
-              {product.images.length > 1 && (
+              {p.images.length > 1 && (
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {product.images.map((_, idx) => (
+                  {p.images.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setCurrentImageIndex(idx)}
                       className={`h-1.5 rounded-full transition duration-300 ${
-                        idx === currentImageIndex
+                        idx === safeImageIndex
                           ? "bg-gold w-5"
                           : "bg-white/60 dark:bg-white/40 hover:bg-white w-1.5"
                       }`}
@@ -205,29 +211,29 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               <div className="p-5 md:p-8 flex flex-col flex-grow">
                 {/* Category */}
                 <p className="text-gold text-[10px] uppercase tracking-[0.2em] mb-1">
-                  {product.category === "Men" ? t("men") : t("women")} · {t("fragrance")}
+                  {p.category === "Men" ? t("men") : t("women")} · {t("fragrance")}
                 </p>
 
                 {/* Name */}
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-black dark:text-white-warm mb-3 leading-tight">
-                  {product.name[lang]}
+                  {p.name[lang]}
                 </h2>
 
                 {/* Price */}
                 <div className="flex items-baseline gap-3 mb-4 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
-                  {selectedSize.oldPrice && (
+                  {size.oldPrice && (
                     <span className="text-black/35 dark:text-white/35 line-through text-sm">
-                      {selectedSize.oldPrice} TND
+                      {size.oldPrice} TND
                     </span>
                   )}
                   <span className="text-lg font-semibold text-gold">
-                    {selectedSize.price} TND
+                    {size.price} TND
                   </span>
                 </div>
 
                 {/* Description */}
                 <p className="text-black/60 dark:text-white/60 font-light text-sm leading-relaxed mb-4">
-                  {product.description[lang]}
+                  {p.description[lang]}
                 </p>
 
                 {/* Notes */}
@@ -236,7 +242,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     {t("notes")}
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
-                    {product.notes[lang].map((note: string) => (
+                    {p.notes[lang].map((note: string) => (
                       <span
                         key={note}
                         className="px-2.5 py-1 bg-neutral-100 dark:bg-white/[0.04] text-black/75 dark:text-white/75 text-[11px] tracking-wider rounded-sm"
@@ -255,17 +261,17 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                       {t("size")}
                     </h4>
                     <div className="flex gap-2">
-                      {product.sizes.map((size) => (
+                      {p.sizes.map((s) => (
                         <button
-                          key={size.size}
-                          onClick={() => setSelectedSize(size)}
+                          key={s.size}
+                          onClick={() => setSelectedSize(s)}
                           className={`px-3.5 py-2 text-sm transition duration-200 rounded-sm ${
-                            selectedSize.size === size.size
+                            size.size === s.size
                               ? "bg-gold text-white dark:text-black font-medium shadow-sm"
                               : "bg-neutral-100 dark:bg-white/[0.04] text-black/60 dark:text-white/60 hover:bg-neutral-200 dark:hover:bg-white/[0.08]"
                           }`}
                         >
-                          {size.size}
+                          {s.size}
                         </button>
                       ))}
                     </div>
