@@ -58,10 +58,22 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
     }
   };
 
-  // Lock body scroll when modal is open
+  // Lock body scroll when modal is open and prevent layout shift
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (isOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = "hidden";
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+    return () => { 
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
   }, [isOpen]);
 
   if (!product || !selectedSize) return null;
@@ -97,17 +109,17 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.3 }}
             onClick={handleClose}
-            className="absolute inset-0 bg-black/80"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 350, damping: 35, mass: 0.8 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 15 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             className="relative w-full md:max-w-4xl md:mx-4 max-h-[94vh] md:max-h-[88vh] bg-white dark:bg-[#0e0e0e] border-t md:border border-black/10 dark:border-white/[0.06] shadow-2xl overflow-hidden rounded-t-2xl md:rounded-lg flex flex-col md:flex-row"
           >
             {/* Close button */}
