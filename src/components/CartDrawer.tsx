@@ -59,7 +59,10 @@ export default function CartDrawer() {
   return (
     <AnimatePresence>
       {isCartOpen && (
-        <>
+        <motion.div
+          key="cart-drawer-container"
+          className="fixed inset-0 z-[100]"
+        >
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -67,7 +70,7 @@ export default function CartDrawer() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 dark:bg-black/80 z-[100]"
+            className="absolute inset-0 bg-black/60 dark:bg-black/80"
           />
 
           {/* Drawer */}
@@ -76,7 +79,8 @@ export default function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: lang === "ar" ? "-100%" : "100%" }}
             transition={{ type: "spring", stiffness: 350, damping: 35, mass: 0.8 }}
-            className="fixed inset-y-0 rtl:left-0 ltr:right-0 w-full max-w-[420px] bg-white dark:bg-[#0e0e0e] shadow-2xl z-[101] flex flex-col transition-colors"
+            className="absolute inset-y-0 rtl:left-0 ltr:right-0 w-full max-w-[420px] bg-white dark:bg-[#0e0e0e] shadow-2xl flex flex-col transition-colors transform-gpu"
+            style={{ WebkitTransform: "translateZ(0)" }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.06] dark:border-white/[0.06]">
@@ -214,7 +218,7 @@ export default function CartDrawer() {
               </div>
             )}
           </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   );

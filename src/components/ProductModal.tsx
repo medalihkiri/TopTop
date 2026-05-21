@@ -105,16 +105,14 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            onClick={handleClose}
-            className="absolute inset-0 bg-black/60 dark:bg-black/80"
-          />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-black/60 dark:bg-black/80"
+          onClick={handleClose}
+        >
 
           {/* Modal */}
           <motion.div
@@ -122,7 +120,9 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 350, damping: 35, mass: 0.8 }}
-            className="relative w-full md:max-w-4xl md:mx-4 max-h-[94vh] md:max-h-[88vh] bg-white dark:bg-[#0e0e0e] border-t md:border border-black/10 dark:border-white/[0.06] shadow-2xl overflow-hidden rounded-t-2xl md:rounded-lg flex flex-col md:flex-row"
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full md:max-w-4xl md:mx-4 max-h-[94svh] md:max-h-[88svh] bg-white dark:bg-[#0e0e0e] border-t md:border border-black/10 dark:border-white/[0.06] shadow-2xl overflow-hidden rounded-t-2xl md:rounded-lg flex flex-col md:flex-row transform-gpu"
+            style={{ WebkitTransform: "translateZ(0)" }}
           >
             {/* Close button */}
             <button
@@ -138,7 +138,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
             {/* Image section - fixed height on mobile, fills half on desktop */}
             <div className="relative w-full md:w-[45%] h-[280px] sm:h-[340px] md:h-auto md:min-h-[480px] bg-neutral-100 dark:bg-black flex-shrink-0">
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 {p.images[safeImageIndex] && (
                   <motion.div
                     key={safeImageIndex}
@@ -332,7 +332,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               </div>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
