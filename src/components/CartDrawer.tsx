@@ -13,6 +13,27 @@ export default function CartDrawer() {
   const { lang, t } = useLanguage();
   const [isCheckout, setIsCheckout] = useState(false);
 
+  // Handle browser back button to close cart instead of exiting app
+  useEffect(() => {
+    if (isCartOpen) {
+      window.history.pushState({ modal: "cart" }, "");
+
+      const handlePopState = () => {
+        setIsCartOpen(false);
+        setTimeout(() => setIsCheckout(false), 300);
+      };
+
+      window.addEventListener("popstate", handlePopState);
+
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+        if (window.history.state?.modal === "cart") {
+          window.history.back();
+        }
+      };
+    }
+  }, [isCartOpen, setIsCartOpen]);
+
   // Lock body scroll when cart is open
   useEffect(() => {
     document.body.style.overflow = isCartOpen ? "hidden" : "";
@@ -33,9 +54,9 @@ export default function CartDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 z-[100]"
           />
 
           {/* Drawer */}
@@ -43,7 +64,7 @@ export default function CartDrawer() {
             initial={{ x: lang === "ar" ? "-100%" : "100%" }}
             animate={{ x: 0 }}
             exit={{ x: lang === "ar" ? "-100%" : "100%" }}
-            transition={{ type: "tween", duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
             className="fixed inset-y-0 rtl:left-0 ltr:right-0 w-full max-w-[420px] bg-white dark:bg-[#0e0e0e] shadow-2xl z-[101] flex flex-col transition-colors"
           >
             {/* Header */}

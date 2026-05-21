@@ -31,6 +31,26 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
     }
   }, [product]);
 
+  // Handle browser back button to close modal instead of exiting app
+  useEffect(() => {
+    if (isOpen) {
+      window.history.pushState({ modal: "product" }, "");
+
+      const handlePopState = () => {
+        onClose();
+      };
+
+      window.addEventListener("popstate", handlePopState);
+
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+        if (window.history.state?.modal === "product") {
+          window.history.back();
+        }
+      };
+    }
+  }, [isOpen, onClose]);
+
   // Lock body scroll when modal is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -70,17 +90,17 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80"
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 60 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="relative w-full md:max-w-4xl md:mx-4 max-h-[94vh] md:max-h-[88vh] bg-white dark:bg-[#0e0e0e] border-t md:border border-black/10 dark:border-white/[0.06] shadow-2xl overflow-hidden rounded-t-2xl md:rounded-lg flex flex-col md:flex-row"
           >
             {/* Close button */}

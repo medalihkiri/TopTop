@@ -53,7 +53,7 @@ export default function Hero() {
           >
             TOP TOP
           </h1>
-          <h2 className="text-[clamp(1.5rem,5vw,2.75rem)] font-sans text-black/85 dark:text-white-warm/85 mb-8 leading-tight transition-colors">
+          <h2 className="text-[clamp(2rem,6vw,3.5rem)] font-sans text-black/85 dark:text-white-warm/85 mb-8 leading-tight transition-colors">
             {t("heroSubtitle")}
           </h2>
         </motion.div>
