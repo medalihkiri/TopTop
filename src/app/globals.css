@@ -91,16 +91,19 @@ h1, h2, h3, h4, h5, h6 {
   scrollbar-width: none;
 }
 
-/* ─── Smooth image loading ─────────────────────── */
+/* ─── Smooth image loading & performance ─────── */
 
 img {
   transition: opacity 0.4s ease;
+  transform: translateZ(0); /* Light hardware acceleration */
 }
 
 /* ─── Button press haptic ──────────────────────── */
 
-button:active:not(:disabled) {
-  transform: scale(0.97);
+button:active:not(:disabled),
+a:active {
+  transform: scale(0.97) translateZ(0);
+  will-change: transform;
 }
 
 /* ─── Premium gold shimmer keyframe ────────────── */

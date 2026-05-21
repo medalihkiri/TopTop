@@ -87,7 +87,7 @@ export default function ContactSection() {
                     href="https://www.instagram.com/toptop.parfums/?hl=fr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 bg-neutral-100 dark:bg-white/[0.04] text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold hover:bg-gold/10 dark:hover:bg-gold/10 transition-all rounded-full"
+                    className="p-2 bg-neutral-100 dark:bg-white/[0.04] text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold hover:bg-gold/10 dark:hover:bg-gold/10 transition rounded-full"
                     aria-label="Instagram"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -98,7 +98,7 @@ export default function ContactSection() {
                   </a>
                   <a
                     href="#"
-                    className="p-2 bg-neutral-100 dark:bg-white/[0.04] text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold hover:bg-gold/10 dark:hover:bg-gold/10 transition-all rounded-full"
+                    className="p-2 bg-neutral-100 dark:bg-white/[0.04] text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold hover:bg-gold/10 dark:hover:bg-gold/10 transition rounded-full"
                     aria-label="Facebook"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -111,17 +111,31 @@ export default function ContactSection() {
           </div>
 
           {/* Map */}
-          <div className="w-full h-[320px] md:h-[400px] bg-black/[0.03] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.04] relative overflow-hidden rounded-sm">
+          <div className="w-full h-[320px] md:h-[400px] bg-black/[0.03] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.04] relative overflow-hidden rounded-sm group cursor-pointer">
+            <a 
+              href="https://maps.app.goo.gl/KcqTwDEAuRxtnY4DA" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="absolute inset-0 z-10"
+              aria-label="Open in Google Maps"
+            />
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102195.42436894565!2d10.100918029517173!3d36.7949999081534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd337f5e7ef543%3A0xd671924e714a0275!2sTunis!5e0!3m2!1sen!2stn!4v1700000000000!5m2!1sen!2stn"
               width="100%"
               height="100%"
-              style={{ border: 0, filter: "grayscale(1) contrast(1.1) opacity(0.7)" }}
+              style={{ border: 0, filter: "grayscale(1) contrast(1.1) opacity(0.7)", pointerEvents: "none" }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Store location"
+              className="transition-transform duration-700 ease-out group-hover:scale-105"
             ></iframe>
+            {/* Optional overlay to hint clickability */}
+            <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-center">
+              <span className="bg-black/80 text-white text-xs tracking-widest uppercase px-4 py-2 rounded-sm backdrop-blur-sm">
+                Open Map
+              </span>
+            </div>
           </div>
         </div>
       </div>

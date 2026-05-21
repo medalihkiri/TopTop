@@ -122,14 +122,14 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                 <>
                   <button
                     onClick={lang === "ar" ? handleNextImage : handlePrevImage}
-                    className="absolute rtl:right-3 ltr:left-3 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-black/50 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition-all shadow-sm backdrop-blur-sm"
+                    className="absolute rtl:right-3 ltr:left-3 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-black/50 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition shadow-sm backdrop-blur-sm"
                     aria-label="Previous image"
                   >
                     <ChevronLeft size={18} className="rtl:rotate-180" />
                   </button>
                   <button
                     onClick={lang === "ar" ? handlePrevImage : handleNextImage}
-                    className="absolute rtl:left-3 ltr:right-3 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-black/50 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition-all shadow-sm backdrop-blur-sm"
+                    className="absolute rtl:left-3 ltr:right-3 top-1/2 -translate-y-1/2 p-2 bg-white/80 dark:bg-black/50 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition shadow-sm backdrop-blur-sm"
                     aria-label="Next image"
                   >
                     <ChevronRight size={18} className="rtl:rotate-180" />
@@ -144,7 +144,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     <button
                       key={idx}
                       onClick={() => setCurrentImageIndex(idx)}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                      className={`h-1.5 rounded-full transition duration-300 ${
                         idx === currentImageIndex
                           ? "bg-gold w-5"
                           : "bg-white/60 dark:bg-white/40 hover:bg-white w-1.5"
@@ -215,7 +215,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                         <button
                           key={size.size}
                           onClick={() => setSelectedSize(size)}
-                          className={`px-3.5 py-2 text-sm transition-all duration-200 rounded-sm ${
+                          className={`px-3.5 py-2 text-sm transition duration-200 rounded-sm ${
                             selectedSize.size === size.size
                               ? "bg-gold text-white dark:text-black font-medium shadow-sm"
                               : "bg-neutral-100 dark:bg-white/[0.04] text-black/60 dark:text-white/60 hover:bg-neutral-200 dark:hover:bg-white/[0.08]"
@@ -259,7 +259,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               <div className="sticky bottom-0 px-5 md:px-8 py-4 bg-white/95 dark:bg-[#0e0e0e]/95 backdrop-blur-sm border-t border-black/[0.04] dark:border-white/[0.04] flex gap-3">
                 <button
                   onClick={handleAddToCart}
-                  className={`flex-1 py-3 text-xs uppercase tracking-[0.12em] font-semibold transition-all duration-300 rounded-sm flex items-center justify-center ${
+                  className={`flex-1 py-3 text-xs uppercase tracking-[0.12em] font-semibold transition duration-300 rounded-sm flex items-center justify-center ${
                     addedFeedback
                       ? "bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/30"
                       : "border border-gold text-gold hover:bg-gold/10 active:bg-gold/15"
@@ -275,7 +275,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                 </button>
                 <button
                   onClick={handleBuyNow}
-                  className="flex-1 py-3 bg-gold text-white dark:text-black hover:bg-gold-dark active:bg-gold-dark transition-all duration-300 uppercase tracking-[0.12em] text-xs font-semibold rounded-sm hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)]"
+                  className="flex-1 py-3 bg-gold text-white dark:text-black hover:bg-gold-dark active:bg-gold-dark transition duration-300 uppercase tracking-[0.12em] text-xs font-semibold rounded-sm hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)]"
                 >
                   {t("buyNow")}
                 </button>

@@ -162,7 +162,7 @@ export default function CartDrawer() {
                     </div>
                     <button
                       onClick={() => setIsCheckout(true)}
-                      className="w-full py-3.5 bg-gold text-white dark:text-black hover:bg-gold-dark transition-all duration-300 uppercase tracking-[0.15em] text-xs font-bold rounded-sm hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)]"
+                      className="w-full py-3.5 bg-gold text-white dark:text-black hover:bg-gold-dark transition duration-300 uppercase tracking-[0.15em] text-xs font-bold rounded-sm hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)]"
                     >
                       {t("proceedToCheckout")}
                     </button>

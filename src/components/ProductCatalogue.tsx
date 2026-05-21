@@ -31,7 +31,7 @@ export default function ProductCatalogue({ onOpenModal }: ProductCatalogueProps)
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`relative px-8 py-2.5 text-xs uppercase tracking-[0.2em] transition-all duration-300 rounded-sm ${
+                className={`relative px-8 py-2.5 text-xs uppercase tracking-[0.2em] transition duration-300 rounded-sm ${
                   activeCategory === cat
                     ? "bg-gold text-white dark:text-black font-semibold shadow-sm"
                     : "text-black/50 dark:text-white/50 hover:text-black dark:hover:text-white"

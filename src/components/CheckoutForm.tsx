@@ -103,7 +103,7 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
   }
 
   const inputClasses =
-    "w-full bg-neutral-50 dark:bg-white/[0.03] border border-black/[0.08] dark:border-white/[0.06] px-4 py-3 text-sm text-black dark:text-white focus:border-gold focus:ring-1 focus:ring-gold/20 outline-none transition-all duration-200 rounded-sm placeholder:text-black/30 dark:placeholder:text-white/25";
+    "w-full bg-neutral-50 dark:bg-white/[0.03] border border-black/[0.08] dark:border-white/[0.06] px-4 py-3 text-sm text-black dark:text-white focus:border-gold focus:ring-1 focus:ring-gold/20 outline-none transition duration-200 rounded-sm placeholder:text-black/30 dark:placeholder:text-white/25";
 
   const labelClasses =
     "block text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40 mb-1.5";
@@ -189,7 +189,7 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3.5 bg-gold text-white dark:text-black hover:bg-gold-dark transition-all duration-300 uppercase tracking-[0.15em] text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed rounded-sm hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] flex items-center justify-center gap-2"
+          className="w-full py-3.5 bg-gold text-white dark:text-black hover:bg-gold-dark transition duration-300 uppercase tracking-[0.15em] text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed rounded-sm hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] flex items-center justify-center gap-2"
         >
           {loading ? (
             <>

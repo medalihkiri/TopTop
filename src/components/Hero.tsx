@@ -72,7 +72,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
           onClick={scrollToCatalogue}
-          className="group px-10 py-4 bg-gold text-white dark:text-black font-semibold uppercase tracking-[0.2em] text-xs hover:bg-gold-dark active:bg-gold-dark transition-all duration-300 hover:shadow-[0_4px_24px_rgba(212,175,55,0.3)]"
+          className="group px-10 py-4 bg-gold text-white dark:text-black font-semibold uppercase tracking-[0.2em] text-xs hover:bg-gold-dark active:bg-gold-dark transition duration-300 hover:shadow-[0_4px_24px_rgba(212,175,55,0.3)]"
         >
           {t("exploreCollection")}
         </motion.button>

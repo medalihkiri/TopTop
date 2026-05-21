@@ -48,7 +48,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition duration-500 ${
         scrolled
           ? "bg-white/90 dark:bg-black/90 backdrop-blur-xl shadow-[0_1px_0_rgba(0,0,0,0.06)] dark:shadow-[0_1px_0_rgba(255,255,255,0.04)]"
           : "bg-transparent"
@@ -140,9 +140,9 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 top-16 bg-white/95 dark:bg-black/95 backdrop-blur-xl z-40"
+            className="md:hidden fixed inset-0 bg-white dark:bg-[#050505] z-40 h-[100dvh] w-full flex flex-col pt-24"
           >
-            <div className="flex flex-col items-center justify-center h-full gap-8 pb-20">
+            <div className="flex flex-col items-center justify-start h-full gap-8">
               {navLinks.map((link, i) => (
                 <motion.button
                   key={link.name}

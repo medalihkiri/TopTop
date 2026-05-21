@@ -28,7 +28,8 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             src={product.images[0]}
             alt={product.name[lang]}
             fill
-            className="object-cover transition-all duration-700 ease-out group-hover:scale-105 opacity-90 dark:opacity-75 group-hover:opacity-100"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition duration-700 ease-out group-hover:scale-105 opacity-90 dark:opacity-75 group-hover:opacity-100"
           />
         )}
 
