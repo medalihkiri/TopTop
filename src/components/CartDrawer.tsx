@@ -27,9 +27,6 @@ export default function CartDrawer() {
 
       return () => {
         window.removeEventListener("popstate", handlePopState);
-        if (window.history.state?.modal === "cart") {
-          window.history.back();
-        }
       };
     }
   }, [isCartOpen, setIsCartOpen]);
@@ -41,8 +38,12 @@ export default function CartDrawer() {
   }, [isCartOpen]);
 
   const handleClose = () => {
-    setIsCartOpen(false);
-    setTimeout(() => setIsCheckout(false), 300);
+    if (window.history.state?.modal === "cart") {
+      window.history.back();
+    } else {
+      setIsCartOpen(false);
+      setTimeout(() => setIsCheckout(false), 300);
+    }
   };
 
   return (
@@ -64,7 +65,7 @@ export default function CartDrawer() {
             initial={{ x: lang === "ar" ? "-100%" : "100%" }}
             animate={{ x: 0 }}
             exit={{ x: lang === "ar" ? "-100%" : "100%" }}
-            transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
+            transition={{ type: "spring", stiffness: 350, damping: 35, mass: 0.8 }}
             className="fixed inset-y-0 rtl:left-0 ltr:right-0 w-full max-w-[420px] bg-white dark:bg-[#0e0e0e] shadow-2xl z-[101] flex flex-col transition-colors"
           >
             {/* Header */}
@@ -74,7 +75,7 @@ export default function CartDrawer() {
               </h2>
               <button
                 onClick={handleClose}
-                className="p-2 -me-2 text-black/40 dark:text-white/40 hover:text-gold dark:hover:text-gold transition-colors"
+                className="p-2 -me-2 text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors"
                 aria-label="Close cart"
               >
                 <X size={20} />
@@ -86,7 +87,7 @@ export default function CartDrawer() {
                 {/* Cart items */}
                 <div className="flex-1 overflow-y-auto px-5 py-5">
                   {items.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-black/40 dark:text-white/40">
+                    <div className="flex flex-col items-center justify-center h-full text-black/50 dark:text-white/50">
                       <ShoppingBag size={40} className="mb-4 opacity-40" />
                       <p className="uppercase tracking-[0.15em] text-xs mb-5">{t("cartEmpty")}</p>
                       <button
@@ -102,9 +103,10 @@ export default function CartDrawer() {
                         <motion.div
                           key={item.id}
                           layout
-                          initial={{ opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, x: -40 }}
+                          initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, x: -50, scale: 0.9 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
                           className="flex gap-3.5"
                         >
                           {/* Thumbnail */}
@@ -126,13 +128,13 @@ export default function CartDrawer() {
                                 <h4 className="font-serif text-sm text-black dark:text-white-warm truncate">
                                   {item.product.name[lang]}
                                 </h4>
-                                <p className="text-black/40 dark:text-white/40 text-[11px] mt-0.5">
+                                <p className="text-black/50 dark:text-white/50 text-[11px] mt-0.5">
                                   {item.size.size}
                                 </p>
                               </div>
                               <button
                                 onClick={() => removeItem(item.id)}
-                                className="flex-shrink-0 p-1 text-black/25 dark:text-white/25 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                                className="flex-shrink-0 p-1 text-black/35 dark:text-white/35 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                                 aria-label="Remove item"
                               >
                                 <Trash2 size={14} />
@@ -176,7 +178,7 @@ export default function CartDrawer() {
                 {items.length > 0 && (
                   <div className="px-5 py-5 border-t border-black/[0.06] dark:border-white/[0.06] bg-neutral-50/50 dark:bg-white/[0.015]">
                     <div className="flex justify-between items-baseline mb-5">
-                      <span className="text-black/50 dark:text-white/50 uppercase tracking-[0.15em] text-[11px]">
+                      <span className="text-black/60 dark:text-white/55 uppercase tracking-[0.15em] text-[11px]">
                         {t("subtotal")}
                       </span>
                       <span className="text-xl font-serif text-gold">{totalPrice} TND</span>

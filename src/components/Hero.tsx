@@ -62,7 +62,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="text-base md:text-lg text-black/60 dark:text-white/65 max-w-lg mb-12 font-light leading-relaxed tracking-wide transition-colors"
+          className="text-base md:text-lg text-black/70 dark:text-white/70 max-w-lg mb-12 font-light leading-relaxed tracking-wide transition-colors"
         >
           {t("heroDesc")}
         </motion.p>
@@ -85,7 +85,7 @@ export default function Hero() {
         transition={{ duration: 1, delay: 1.4 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
       >
-        <span className="text-black/40 dark:text-white/40 text-[10px] uppercase tracking-[0.25em] transition-colors">
+        <span className="text-black/50 dark:text-white/50 text-[10px] uppercase tracking-[0.25em] transition-colors">
           {t("scroll")}
         </span>
         <motion.div

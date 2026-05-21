@@ -22,26 +22,7 @@ export default function SplashCursor() {
     window.addEventListener("resize", resize);
     resize();
 
-    const addParticle = (x: number, y: number) => {
-      for (let i = 0; i < 3; i++) {
-        particles.push({
-          x,
-          y,
-          size: Math.random() * 3 + 1,
-          speedX: (Math.random() - 0.5) * 2,
-          speedY: (Math.random() - 0.5) * 2,
-          life: 1,
-        });
-      }
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      addParticle(mouse.x, mouse.y);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
+    let animationFrameId: number | null = null;
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -62,14 +43,44 @@ export default function SplashCursor() {
           i--;
         }
       }
-      requestAnimationFrame(animate);
+      
+      if (particles.length > 0) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        animationFrameId = null;
+      }
     };
 
-    animate();
+    const addParticle = (x: number, y: number) => {
+      for (let i = 0; i < 3; i++) {
+        particles.push({
+          x,
+          y,
+          size: Math.random() * 3 + 1,
+          speedX: (Math.random() - 0.5) * 2,
+          speedY: (Math.random() - 0.5) * 2,
+          life: 1,
+        });
+      }
+      if (!animationFrameId) {
+        animate();
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      addParticle(mouse.x, mouse.y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
 

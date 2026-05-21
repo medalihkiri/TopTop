@@ -44,12 +44,17 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
       return () => {
         window.removeEventListener("popstate", handlePopState);
-        if (window.history.state?.modal === "product") {
-          window.history.back();
-        }
       };
     }
   }, [isOpen, onClose]);
+
+  const handleClose = () => {
+    if (window.history.state?.modal === "product") {
+      window.history.back();
+    } else {
+      onClose();
+    }
+  };
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -68,17 +73,17 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   };
 
   const handleAddToCart = () => {
-    addItem(product, selectedSize, quantity);
+    addItem(product, selectedSize, quantity, false);
     setAddedFeedback(true);
     setTimeout(() => setAddedFeedback(false), 1500);
   };
 
   const handleBuyNow = () => {
-    addItem(product, selectedSize, quantity);
-    onClose();
+    addItem(product, selectedSize, quantity, false);
+    handleClose();
     setTimeout(() => {
       setIsCartOpen(true);
-    }, 100);
+    }, 300); // give the modal time to close smoothly before opening cart
   };
 
   return (
@@ -90,22 +95,22 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={onClose}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            onClick={handleClose}
             className="absolute inset-0 bg-black/80"
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 40, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 350, damping: 35, mass: 0.8 }}
             className="relative w-full md:max-w-4xl md:mx-4 max-h-[94vh] md:max-h-[88vh] bg-white dark:bg-[#0e0e0e] border-t md:border border-black/10 dark:border-white/[0.06] shadow-2xl overflow-hidden rounded-t-2xl md:rounded-lg flex flex-col md:flex-row"
           >
             {/* Close button */}
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="absolute top-3 rtl:left-3 ltr:right-3 z-20 p-2 bg-white/90 dark:bg-black/60 text-black/70 dark:text-white/70 hover:text-gold dark:hover:text-gold rounded-full transition-colors backdrop-blur-sm"
               aria-label="Close modal"
             >
@@ -117,25 +122,34 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
             {/* Image section - fixed height on mobile, fills half on desktop */}
             <div className="relative w-full md:w-[45%] h-[280px] sm:h-[340px] md:h-auto md:min-h-[480px] bg-neutral-100 dark:bg-black flex-shrink-0">
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 {product.images[currentImageIndex] && (
                   <motion.div
                     key={currentImageIndex}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    initial={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     className="absolute inset-0"
                   >
                     <Image
                       src={product.images[currentImageIndex]}
                       alt={product.name[lang]}
                       fill
+                      priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
                     />
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* Preload adjacent images */}
+              <div className="hidden">
+                {product.images.map((img) => (
+                  <Image key={`preload-${img}`} src={img} alt="preload" width={1} height={1} priority />
+                ))}
+              </div>
 
               {/* Nav arrows */}
               {product.images.length > 1 && (
@@ -202,7 +216,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                 </div>
 
                 {/* Description */}
-                <p className="text-black/55 dark:text-white/55 font-light text-sm leading-relaxed mb-4">
+                <p className="text-black/60 dark:text-white/60 font-light text-sm leading-relaxed mb-4">
                   {product.description[lang]}
                 </p>
 
@@ -215,7 +229,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     {product.notes[lang].map((note: string) => (
                       <span
                         key={note}
-                        className="px-2.5 py-1 bg-neutral-100 dark:bg-white/[0.04] text-black/70 dark:text-white/70 text-[11px] tracking-wider rounded-sm"
+                        className="px-2.5 py-1 bg-neutral-100 dark:bg-white/[0.04] text-black/75 dark:text-white/75 text-[11px] tracking-wider rounded-sm"
                       >
                         {note}
                       </span>
@@ -227,7 +241,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                 <div className="flex flex-wrap gap-5 mb-5">
                   {/* Size selector */}
                   <div className="flex-1 min-w-[140px]">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40 mb-2">
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-black/50 dark:text-white/50 mb-2">
                       {t("size")}
                     </h4>
                     <div className="flex gap-2">
@@ -249,7 +263,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
                   {/* Quantity */}
                   <div>
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40 mb-2">
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-black/50 dark:text-white/50 mb-2">
                       {t("quantity")}
                     </h4>
                     <div className="inline-flex items-center bg-neutral-100 dark:bg-white/[0.04] rounded-sm overflow-hidden">

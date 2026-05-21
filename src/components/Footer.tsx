@@ -18,17 +18,17 @@ export default function Footer() {
           </span>
         </div>
 
-        <p className="text-black/45 dark:text-white/35 text-xs mb-8 text-center max-w-sm font-light leading-relaxed">
+        <p className="text-black/55 dark:text-white/50 text-xs mb-8 text-center max-w-sm font-light leading-relaxed">
           {t("footerDesc")}
         </p>
 
         <div className="w-16 h-[1px] bg-gold/20 mb-8" />
 
         <div className="flex flex-col items-center gap-2">
-          <p className="text-black/40 dark:text-white/25 text-[11px] text-center" dir="ltr">
+          <p className="text-black/50 dark:text-white/40 text-[11px] text-center" dir="ltr">
             © {new Date().getFullYear()} TOP TOP Perfumes. {t("rights")}
           </p>
-          <p className="text-black/25 dark:text-white/15 text-[9px] tracking-[0.2em] uppercase mt-2">
+          <p className="text-black/35 dark:text-white/25 text-[9px] tracking-[0.2em] uppercase mt-2" dir="ltr">
             developed by nocta.ink
           </p>
         </div>

@@ -58,12 +58,12 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
       // 2. Generate WhatsApp Message
       const itemsList = items
         .map((item) => `- ${item.quantity}x ${item.product.name[lang]} (${item.size.size}) : ${item.size.price * item.quantity} TND`)
-        .join("%0A");
+        .join("\n");
 
-      const message = `*NEW ORDER - TOP TOP* 🌟%0A%0A*Customer Details:*%0AName: ${formData.fullName}%0APhone: ${formData.phone}%0AGovernorate: ${formData.governorate}%0ACity: ${formData.city}%0A%0A*Order:*%0A${itemsList}%0A%0A*Total:* ${totalPrice} TND%0A%0A*Notes:* ${formData.note || "None"}`;
+      const message = `*NEW ORDER - TOP TOP* 🌟\n\n*Customer Details:*\nName: ${formData.fullName}\nPhone: ${formData.phone}\nGovernorate: ${formData.governorate}\nCity: ${formData.city}\n\n*Order:*\n${itemsList}\n\n*Total:* ${totalPrice} TND\n\n*Notes:* ${formData.note || "None"}`;
 
       const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "21699336444";
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
       setSuccess(true);
       clearCart();
@@ -95,7 +95,7 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
           <Check className="text-gold" size={24} />
         </div>
         <h3 className="text-xl font-serif text-gold mb-2">{t("orderReceived")}</h3>
-        <p className="text-black/50 dark:text-white/50 text-sm leading-relaxed max-w-xs">
+        <p className="text-black/60 dark:text-white/55 text-sm leading-relaxed max-w-xs">
           {t("orderSuccessMsg")}
         </p>
       </motion.div>
@@ -103,10 +103,10 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
   }
 
   const inputClasses =
-    "w-full bg-neutral-50 dark:bg-white/[0.03] border border-black/[0.08] dark:border-white/[0.06] px-4 py-3 text-sm text-black dark:text-white focus:border-gold focus:ring-1 focus:ring-gold/20 outline-none transition duration-200 rounded-sm placeholder:text-black/30 dark:placeholder:text-white/25";
+    "w-full bg-neutral-50 dark:bg-white/[0.03] border border-black/[0.08] dark:border-white/[0.06] px-4 py-3 text-sm text-black dark:text-white focus:border-gold focus:ring-1 focus:ring-gold/20 outline-none transition duration-200 rounded-sm placeholder:text-black/40 dark:placeholder:text-white/35";
 
   const labelClasses =
-    "block text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40 mb-1.5";
+    "block text-[10px] uppercase tracking-[0.2em] text-black/50 dark:text-white/50 mb-1.5";
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -183,7 +183,7 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
           <span className="text-black/60 dark:text-white/60 text-sm">{t("total")}</span>
           <span className="text-lg font-serif text-gold font-bold">{totalPrice} TND</span>
         </div>
-        <p className="text-[11px] text-black/35 dark:text-white/35 mb-4 text-center leading-relaxed">
+        <p className="text-[11px] text-black/45 dark:text-white/45 mb-4 text-center leading-relaxed">
           {t("codMessage")}
         </p>
         <button

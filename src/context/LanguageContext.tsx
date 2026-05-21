@@ -66,8 +66,8 @@ export const translations: Translations = {
   },
   location: { ar: "الموقع", fr: "Emplacement" },
   locationAddress: {
-    ar: "شارع الحبيب بورقيبة\nتونس، تونس",
-    fr: "Avenue Habib Bourguiba\nTunis, Tunisie",
+    ar: "مركز هالة، شارع 2 مارس\nبنزرت 7000",
+    fr: "Hela centre, Rue 2 Mars\nBizerte 7000",
   },
   phoneWhatsApp: { ar: "الهاتف وواتساب", fr: "Téléphone & WhatsApp" },
   whatsappUs: { ar: "راسلنا على واتساب", fr: "Contactez-nous via WhatsApp" },

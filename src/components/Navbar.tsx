@@ -60,7 +60,7 @@ export default function Navbar() {
           <div className="flex items-center gap-1">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2.5 -ms-2 text-black/70 dark:text-white-warm/80 hover:text-gold dark:hover:text-gold transition-colors"
+              className="md:hidden p-2.5 -ms-2 text-black/80 dark:text-white-warm/85 hover:text-gold dark:hover:text-gold transition-colors"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -84,7 +84,7 @@ export default function Navbar() {
               <button
                 key={link.name}
                 onClick={() => scrollTo(link.href)}
-                className="relative text-[11px] uppercase tracking-[0.2em] text-black/60 dark:text-white/60 hover:text-gold dark:hover:text-gold transition-colors py-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-gold after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-center"
+                className="relative text-[11px] uppercase tracking-[0.2em] text-black/70 dark:text-white/65 hover:text-gold dark:hover:text-gold transition-colors py-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-gold after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-center"
               >
                 {link.name}
               </button>
@@ -136,11 +136,11 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 bg-white dark:bg-[#050505] z-40 h-[100dvh] w-full flex flex-col pt-24"
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden fixed inset-0 bg-white/95 dark:bg-[#050505]/95 z-40 h-[100dvh] w-full flex flex-col pt-24"
           >
             <div className="flex flex-col items-center justify-start h-full gap-8">
               {navLinks.map((link, i) => (

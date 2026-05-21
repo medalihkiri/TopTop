@@ -17,7 +17,7 @@ export default function ContactSection() {
           <h2 className="text-2xl md:text-3xl font-serif text-gold mb-3">
             {t("visitBoutique")}
           </h2>
-          <p className="text-black/50 dark:text-white/50 font-light text-sm max-w-lg mx-auto leading-relaxed">
+          <p className="text-black/60 dark:text-white/55 font-light text-sm max-w-lg mx-auto leading-relaxed">
             {t("visitDesc")}
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function ContactSection() {
                   href="https://maps.app.goo.gl/KcqTwDEAuRxtnY4DA"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold font-light text-sm whitespace-pre-line leading-relaxed transition-colors block"
+                  className="text-black/60 dark:text-white/55 hover:text-gold dark:hover:text-gold font-light text-sm whitespace-pre-line leading-relaxed transition-colors block"
                 >
                   {t("locationAddress")}
                 </a>
@@ -54,7 +54,7 @@ export default function ContactSection() {
                 <h4 className="text-base font-serif text-black dark:text-white-warm mb-1">
                   {t("phoneWhatsApp")}
                 </h4>
-                <p className="text-black/50 dark:text-white/50 font-light text-sm" dir="ltr">
+                <p className="text-black/60 dark:text-white/55 font-light text-sm" dir="ltr">
                   +216 99 336 444
                 </p>
                 <a

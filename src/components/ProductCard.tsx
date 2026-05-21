@@ -8,17 +8,20 @@ import { useLanguage } from "@/context/LanguageContext";
 interface ProductCardProps {
   product: Product;
   onClick: () => void;
+  layout?: boolean | "position" | "size";
+  priority?: boolean;
 }
 
-export default function ProductCard({ product, onClick }: ProductCardProps) {
+export default function ProductCard({ product, onClick, layout, priority }: ProductCardProps) {
   const { lang, t } = useLanguage();
   const minPrice = Math.min(...product.sizes.map((s) => s.price));
 
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.25 }}
+      layout={layout}
+      whileHover={{ y: -6 }}
+      whileTap={{ scale: 0.96 }}
+      transition={{ layout: { type: "spring", stiffness: 350, damping: 30 }, type: "spring", stiffness: 400, damping: 25 }}
       className="group cursor-pointer flex flex-col"
       onClick={onClick}
     >
@@ -28,6 +31,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
             src={product.images[0]}
             alt={product.name[lang]}
             fill
+            priority={priority}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition duration-700 ease-out group-hover:scale-105 opacity-90 dark:opacity-75 group-hover:opacity-100"
           />
@@ -53,7 +57,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
         <h3 className="text-sm md:text-base font-serif text-black dark:text-white-warm group-hover:text-gold dark:group-hover:text-gold transition-colors leading-snug">
           {product.name[lang]}
         </h3>
-        <p className="text-black/40 dark:text-white/40 text-[10px] uppercase tracking-[0.15em]">
+        <p className="text-black/50 dark:text-white/50 text-[10px] uppercase tracking-[0.15em]">
           {product.category === "Men" ? t("men") : t("women")}
         </p>
         <p className="text-gold font-medium text-sm mt-auto pt-1">

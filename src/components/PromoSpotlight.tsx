@@ -40,9 +40,9 @@ export default function PromoSpotlight({ products, onOpenModal }: PromoSpotlight
           return (
             <motion.div
               key={product.id}
-              whileHover={{ y: -4 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.25 }}
+              whileHover={{ y: -6 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
               className="flex-shrink-0 w-[260px] md:w-[300px] snap-center cursor-pointer group"
               onClick={() => onOpenModal(product)}
             >
@@ -52,6 +52,8 @@ export default function PromoSpotlight({ products, onOpenModal }: PromoSpotlight
                     src={product.images[0]}
                     alt={product.name[lang]}
                     fill
+                    sizes="(max-width: 768px) 260px, 300px"
+                    priority
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 dark:opacity-80 group-hover:opacity-100"
                   />
                 )}
@@ -68,7 +70,7 @@ export default function PromoSpotlight({ products, onOpenModal }: PromoSpotlight
                   </h3>
                   <div className="flex items-baseline gap-2.5">
                     {promoSize.oldPrice && (
-                      <span className="text-black/40 dark:text-white/40 line-through text-sm">
+                      <span className="text-black/50 dark:text-white/50 line-through text-sm">
                         {promoSize.oldPrice} TND
                       </span>
                     )}

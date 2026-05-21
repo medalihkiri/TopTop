@@ -128,3 +128,37 @@ a:active {
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out both;
 }
+
+/* ─── RTL / Arabic typography fixes ────────────── */
+/* Arabic script is connected — letter-spacing and
+   uppercase break its visual flow and legibility. */
+
+[dir="rtl"] {
+  /* Kill uppercase everywhere — Arabic has no case */
+  text-transform: none !important;
+  /* Tighten letter-spacing — wide tracking breaks
+     connected Arabic letterforms */
+  letter-spacing: 0.02em !important;
+  /* Arabic glyphs are taller — give them breathing room */
+  line-height: 1.7;
+}
+
+/* Override uppercase on all children too */
+[dir="rtl"] * {
+  text-transform: none !important;
+}
+
+/* Allow specific LTR elements inside RTL to keep their styling */
+[dir="rtl"] [dir="ltr"] {
+  text-transform: uppercase !important;
+  letter-spacing: inherit !important;
+  line-height: inherit;
+}
+
+/* Boost tiny text sizes for Arabic readability */
+[dir="rtl"] .text-\[9px\] { font-size: 11px !important; }
+[dir="rtl"] .text-\[10px\] { font-size: 12px !important; }
+[dir="rtl"] .text-\[11px\] { font-size: 13px !important; }
+
+/* Make Arabic body text slightly heavier for readability */
+[dir="rtl"] .font-light { font-weight: 400 !important; }
