@@ -14,24 +14,24 @@ interface ProductModalProps {
   onClose: () => void;
 }
 
-export default function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
+export default function ProductModal({ product: incomingProduct, isOpen, onClose }: ProductModalProps) {
   const { addItem, setIsCartOpen } = useCart();
   const { lang, t } = useLanguage();
-  const [displayProduct, setDisplayProduct] = useState<Product | null>(product);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [addedFeedback, setAddedFeedback] = useState(false);
+  const [product, setProduct] = useState<Product | null>(incomingProduct);
 
   useEffect(() => {
-    if (product) {
-      setDisplayProduct(product);
+    if (incomingProduct) {
+      setProduct(incomingProduct);
       setCurrentImageIndex(0);
-      setSelectedSize(product.sizes[0]);
+      setSelectedSize(incomingProduct.sizes[0]);
       setQuantity(1);
       setAddedFeedback(false);
     }
-  }, [product]);
+  }, [incomingProduct]);
 
   // Handle browser back button to close modal instead of exiting app
   useEffect(() => {
@@ -60,42 +60,28 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
   // Lock body scroll when modal is open
   useEffect(() => {
-    if (isOpen) {
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    }
-    return () => { 
-      document.body.style.overflow = "";
-      document.body.style.paddingRight = "";
-    };
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
-  const p = product || displayProduct;
-  const size = selectedSize || p?.sizes[0];
-  const safeImageIndex = p && p.images.length > currentImageIndex ? currentImageIndex : 0;
-
-  if (!p || !size) return null;
+  if (!product || !selectedSize) return null;
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % p.images.length);
+    setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
   };
 
   const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + p.images.length) % p.images.length);
+    setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
   };
 
   const handleAddToCart = () => {
-    addItem(p, size, quantity, false);
+    addItem(product, selectedSize, quantity, false);
     setAddedFeedback(true);
     setTimeout(() => setAddedFeedback(false), 1500);
   };
 
   const handleBuyNow = () => {
-    addItem(p, size, quantity, false);
+    addItem(product, selectedSize, quantity, false);
     handleClose();
     setTimeout(() => {
       setIsCartOpen(true);
@@ -105,14 +91,16 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] flex items-end md:items-center justify-center bg-black/60 dark:bg-black/80"
-          onClick={handleClose}
-        >
+        <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            onClick={handleClose}
+            className="absolute inset-0 bg-black/80"
+          />
 
           {/* Modal */}
           <motion.div
@@ -120,9 +108,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 350, damping: 35, mass: 0.8 }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full md:max-w-4xl md:mx-4 max-h-[94svh] md:max-h-[88svh] bg-white dark:bg-[#0e0e0e] border-t md:border border-black/10 dark:border-white/[0.06] shadow-2xl overflow-hidden rounded-t-2xl md:rounded-lg flex flex-col md:flex-row transform-gpu"
-            style={{ WebkitTransform: "translateZ(0)" }}
+            className="relative w-full md:max-w-4xl md:mx-4 max-h-[94vh] md:max-h-[88vh] bg-white dark:bg-[#0e0e0e] border-t md:border border-black/10 dark:border-white/[0.06] shadow-2xl overflow-hidden rounded-t-2xl md:rounded-lg flex flex-col md:flex-row"
           >
             {/* Close button */}
             <button
@@ -138,19 +124,19 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
             {/* Image section - fixed height on mobile, fills half on desktop */}
             <div className="relative w-full md:w-[45%] h-[280px] sm:h-[340px] md:h-auto md:min-h-[480px] bg-neutral-100 dark:bg-black flex-shrink-0">
-              <AnimatePresence initial={false}>
-                {p.images[safeImageIndex] && (
+              <AnimatePresence>
+                {product.images[currentImageIndex] && (
                   <motion.div
-                    key={safeImageIndex}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
+                    key={currentImageIndex}
+                    initial={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     className="absolute inset-0"
                   >
                     <Image
-                      src={p.images[safeImageIndex]}
-                      alt={p.name[lang]}
+                      src={product.images[currentImageIndex]}
+                      alt={product.name[lang]}
                       fill
                       priority
                       sizes="(max-width: 768px) 100vw, 50vw"
@@ -162,13 +148,13 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
               {/* Preload adjacent images */}
               <div className="hidden">
-                {p.images.map((img) => (
+                {product.images.map((img) => (
                   <Image key={`preload-${img}`} src={img} alt="preload" width={1} height={1} priority />
                 ))}
               </div>
 
               {/* Nav arrows */}
-              {p.images.length > 1 && (
+              {product.images.length > 1 && (
                 <>
                   <button
                     onClick={lang === "ar" ? handleNextImage : handlePrevImage}
@@ -188,14 +174,14 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               )}
 
               {/* Image dots */}
-              {p.images.length > 1 && (
+              {product.images.length > 1 && (
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {p.images.map((_, idx) => (
+                  {product.images.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setCurrentImageIndex(idx)}
                       className={`h-1.5 rounded-full transition duration-300 ${
-                        idx === safeImageIndex
+                        idx === currentImageIndex
                           ? "bg-gold w-5"
                           : "bg-white/60 dark:bg-white/40 hover:bg-white w-1.5"
                       }`}
@@ -211,29 +197,29 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               <div className="p-5 md:p-8 flex flex-col flex-grow">
                 {/* Category */}
                 <p className="text-gold text-[10px] uppercase tracking-[0.2em] mb-1">
-                  {p.category === "Men" ? t("men") : t("women")} · {t("fragrance")}
+                  {product.category === "Men" ? t("men") : t("women")} · {t("fragrance")}
                 </p>
 
                 {/* Name */}
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-serif text-black dark:text-white-warm mb-3 leading-tight">
-                  {p.name[lang]}
+                  {product.name[lang]}
                 </h2>
 
                 {/* Price */}
                 <div className="flex items-baseline gap-3 mb-4 pb-4 border-b border-black/[0.06] dark:border-white/[0.06]">
-                  {size.oldPrice && (
+                  {selectedSize.oldPrice && (
                     <span className="text-black/35 dark:text-white/35 line-through text-sm">
-                      {size.oldPrice} TND
+                      {selectedSize.oldPrice} TND
                     </span>
                   )}
                   <span className="text-lg font-semibold text-gold">
-                    {size.price} TND
+                    {selectedSize.price} TND
                   </span>
                 </div>
 
                 {/* Description */}
                 <p className="text-black/60 dark:text-white/60 font-light text-sm leading-relaxed mb-4">
-                  {p.description[lang]}
+                  {product.description[lang]}
                 </p>
 
                 {/* Notes */}
@@ -242,7 +228,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     {t("notes")}
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
-                    {p.notes[lang].map((note: string) => (
+                    {product.notes[lang].map((note: string) => (
                       <span
                         key={note}
                         className="px-2.5 py-1 bg-neutral-100 dark:bg-white/[0.04] text-black/75 dark:text-white/75 text-[11px] tracking-wider rounded-sm"
@@ -261,17 +247,17 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                       {t("size")}
                     </h4>
                     <div className="flex gap-2">
-                      {p.sizes.map((s) => (
+                      {product.sizes.map((size) => (
                         <button
-                          key={s.size}
-                          onClick={() => setSelectedSize(s)}
+                          key={size.size}
+                          onClick={() => setSelectedSize(size)}
                           className={`px-3.5 py-2 text-sm transition duration-200 rounded-sm ${
-                            size.size === s.size
+                            selectedSize.size === size.size
                               ? "bg-gold text-white dark:text-black font-medium shadow-sm"
                               : "bg-neutral-100 dark:bg-white/[0.04] text-black/60 dark:text-white/60 hover:bg-neutral-200 dark:hover:bg-white/[0.08]"
                           }`}
                         >
-                          {s.size}
+                          {size.size}
                         </button>
                       ))}
                     </div>
@@ -332,7 +318,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               </div>
             </div>
           </motion.div>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
