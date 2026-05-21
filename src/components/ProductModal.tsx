@@ -107,7 +107,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             onClick={handleClose}
-            className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 dark:bg-black/80"
           />
 
           {/* Modal */}
@@ -136,9 +136,9 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                 {product.images[currentImageIndex] && (
                   <motion.div
                     key={currentImageIndex}
-                    initial={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     className="absolute inset-0"
                   >

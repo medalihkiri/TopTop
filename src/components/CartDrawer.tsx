@@ -67,7 +67,7 @@ export default function CartDrawer() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 z-[100]"
           />
 
           {/* Drawer */}
