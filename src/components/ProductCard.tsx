@@ -8,20 +8,18 @@ import { useLanguage } from "@/context/LanguageContext";
 interface ProductCardProps {
   product: Product;
   onClick: () => void;
-  layout?: boolean | "position" | "size";
   priority?: boolean;
 }
 
-export default function ProductCard({ product, onClick, layout, priority }: ProductCardProps) {
+export default function ProductCard({ product, onClick, priority }: ProductCardProps) {
   const { lang, t } = useLanguage();
   const minPrice = Math.min(...product.sizes.map((s) => s.price));
 
   return (
     <motion.div
-      layout={layout}
       whileHover={{ y: -6 }}
       whileTap={{ scale: 0.96 }}
-      transition={{ layout: { type: "spring", stiffness: 350, damping: 30 }, type: "spring", stiffness: 400, damping: 25 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className="group cursor-pointer flex flex-col"
       onClick={onClick}
     >

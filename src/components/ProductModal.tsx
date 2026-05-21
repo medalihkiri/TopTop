@@ -58,8 +58,18 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
   // Lock body scroll when modal is open
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (isOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+    return () => { 
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
   }, [isOpen]);
 
   if (!product || !selectedSize) return null;
@@ -97,7 +107,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             onClick={handleClose}
-            className="absolute inset-0 bg-black/80"
+            className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
           />
 
           {/* Modal */}

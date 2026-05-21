@@ -33,8 +33,18 @@ export default function CartDrawer() {
 
   // Lock body scroll when cart is open
   useEffect(() => {
-    document.body.style.overflow = isCartOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    if (isCartOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    }
+    return () => { 
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+    };
   }, [isCartOpen]);
 
   const handleClose = () => {
@@ -57,7 +67,7 @@ export default function CartDrawer() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/60 dark:bg-black/80 z-[100]"
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-[100]"
           />
 
           {/* Drawer */}

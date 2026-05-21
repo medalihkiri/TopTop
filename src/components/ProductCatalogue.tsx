@@ -58,7 +58,6 @@ export default function ProductCatalogue({ onOpenModal }: ProductCatalogueProps)
                 key={product.id}
                 product={product}
                 onClick={() => onOpenModal(product)}
-                layout
                 priority={index < 4}
               />
             ))}
