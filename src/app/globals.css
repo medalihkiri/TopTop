@@ -67,15 +67,15 @@ h1, h2, h3, h4, h5, h6 {
 /* ─── Scrollbar (webkit) ───────────────────────── */
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent; 
 }
 ::-webkit-scrollbar-thumb {
-  background: #222; 
-  border-radius: 3px;
+  background: rgba(212,175,55,0.25); 
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold-dark); 
@@ -95,7 +95,7 @@ h1, h2, h3, h4, h5, h6 {
 
 img {
   transition: opacity 0.4s ease;
-  transform: translateZ(0); /* Light hardware acceleration */
+  transform: translateZ(0);
 }
 
 /* ─── Button press haptic ──────────────────────── */
@@ -106,7 +106,7 @@ a:active {
   will-change: transform;
 }
 
-/* ─── Premium gold shimmer keyframe ────────────── */
+/* ─── Keyframes ─────────────────────────────────── */
 
 @keyframes subtle-shimmer {
   0% { opacity: 0.7; }
@@ -118,10 +118,8 @@ a:active {
   animation: subtle-shimmer 3s ease-in-out infinite;
 }
 
-/* ─── Gentle fade-in for sections ──────────────── */
-
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -129,26 +127,81 @@ a:active {
   animation: fadeInUp 0.6s ease-out both;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+  50% { box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.12); }
+}
+
+.animate-gold-pulse {
+  animation: goldPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.35s ease-out both;
+}
+
+@keyframes bounceDot {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ─── Gold shimmer sweep ────────────────────────── */
+
+@keyframes goldSweep {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.gold-sweep {
+  background: linear-gradient(
+    90deg,
+    var(--color-gold) 0%,
+    var(--color-gold-light) 40%,
+    var(--color-gold) 60%,
+    var(--color-gold-dark) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldSweep 4s linear infinite;
+}
+
 /* ─── RTL / Arabic typography fixes ────────────── */
-/* Arabic script is connected — letter-spacing and
-   uppercase break its visual flow and legibility. */
 
 [dir="rtl"] {
-  /* Kill uppercase everywhere — Arabic has no case */
   text-transform: none !important;
-  /* Tighten letter-spacing — wide tracking breaks
-     connected Arabic letterforms */
   letter-spacing: 0.02em !important;
-  /* Arabic glyphs are taller — give them breathing room */
   line-height: 1.7;
 }
 
-/* Override uppercase on all children too */
 [dir="rtl"] * {
   text-transform: none !important;
 }
 
-/* Allow specific LTR elements inside RTL to keep their styling */
 [dir="rtl"] [dir="ltr"] {
   text-transform: uppercase !important;
   letter-spacing: inherit !important;
@@ -162,3 +215,24 @@ a:active {
 
 /* Make Arabic body text slightly heavier for readability */
 [dir="rtl"] .font-light { font-weight: 400 !important; }
+
+/* ─── Glass card ──────────────────────────────── */
+
+.glass-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ─── Gold border gradient ───────────────────── */
+
+.border-gold-gradient {
+  border-image: linear-gradient(135deg, var(--color-gold), var(--color-gold-light), var(--color-gold-dark)) 1;
+}
+
+/* ─── Stagger animation helpers ──────────────── */
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }

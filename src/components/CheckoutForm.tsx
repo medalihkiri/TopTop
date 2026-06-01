@@ -6,7 +6,7 @@ import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
-import { Check, Loader2 } from "lucide-react";
+import { Check, Loader2, User, Phone, MapPin, FileText, ShoppingBag } from "lucide-react";
 
 interface CheckoutFormProps {
   onComplete: () => void;
@@ -34,11 +34,10 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (items.length === 0) return;
-    
+
     setLoading(true);
 
     try {
-      // 1. Save to Firebase
       const orderData = {
         customer: formData,
         items: items.map(item => ({
@@ -55,7 +54,6 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
 
       await addDoc(collection(db, "orders"), orderData);
 
-      // 2. Generate WhatsApp Message
       const itemsList = items
         .map((item) => `- ${item.quantity}x ${item.product.name[lang]} (${item.size.size}) : ${item.size.price * item.quantity} TND`)
         .join("\n");
@@ -67,11 +65,9 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
 
       setSuccess(true);
       clearCart();
-      
-      // Open WhatsApp in new tab
+
       window.open(whatsappUrl, "_blank");
-      
-      // Close drawer after short delay
+
       setTimeout(() => {
         onComplete();
       }, 3000);
@@ -87,120 +83,170 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
   if (success) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center justify-center py-16 text-center"
+        transition={{ ease: [0.22, 1, 0.36, 1] }}
+        className="flex flex-col items-center justify-center py-16 text-center gap-5"
       >
-        <div className="w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center mb-5">
-          <Check className="text-gold" size={24} />
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.1, type: "spring", stiffness: 400, damping: 20 }}
+          className="w-16 h-16 rounded-full bg-gold/15 border border-gold/25 flex items-center justify-center"
+        >
+          <Check className="text-gold" size={26} />
+        </motion.div>
+        <div>
+          <h3 className="text-xl font-serif text-gold mb-2">{t("orderReceived")}</h3>
+          <p className="text-black/55 dark:text-white/50 text-sm leading-relaxed max-w-xs">
+            {t("orderSuccessMsg")}
+          </p>
         </div>
-        <h3 className="text-xl font-serif text-gold mb-2">{t("orderReceived")}</h3>
-        <p className="text-black/60 dark:text-white/55 text-sm leading-relaxed max-w-xs">
-          {t("orderSuccessMsg")}
-        </p>
       </motion.div>
     );
   }
 
-  const inputClasses =
-    "w-full bg-neutral-50 dark:bg-white/[0.03] border border-black/[0.08] dark:border-white/[0.06] px-4 py-3 text-sm text-black dark:text-white focus:border-gold focus:ring-1 focus:ring-gold/20 outline-none transition duration-200 rounded-sm placeholder:text-black/40 dark:placeholder:text-white/35";
+  const inputBase =
+    "w-full bg-white dark:bg-white/[0.04] border border-black/[0.1] dark:border-white/[0.08] px-4 py-3 text-sm text-black dark:text-white focus:border-gold focus:ring-2 focus:ring-gold/15 outline-none transition-all duration-200 rounded-sm placeholder:text-black/30 dark:placeholder:text-white/30";
 
-  const labelClasses =
-    "block text-[10px] uppercase tracking-[0.2em] text-black/50 dark:text-white/50 mb-1.5";
+  const labelBase =
+    "flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] text-black/50 dark:text-white/50 mb-1.5";
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+      {/* Order summary mini */}
+      <div className="bg-neutral-50 dark:bg-white/[0.025] border border-black/[0.06] dark:border-white/[0.05] rounded-sm p-3 mb-1">
+        <div className="flex items-center gap-2 mb-2">
+          <ShoppingBag size={13} className="text-gold" />
+          <span className="text-[10px] uppercase tracking-[0.15em] text-black/50 dark:text-white/50">
+            {lang === "ar" ? "ملخص الطلب" : "Résumé de la commande"}
+          </span>
+        </div>
+        <div className="space-y-1 max-h-28 overflow-y-auto">
+          {items.map((item) => (
+            <div key={item.id} className="flex justify-between text-xs text-black/60 dark:text-white/55">
+              <span className="truncate flex-1 me-2">{item.quantity}× {item.product.name[lang]} ({item.size.size})</span>
+              <span className="flex-shrink-0 text-gold font-medium">{item.size.price * item.quantity} TND</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-between items-baseline pt-2 mt-2 border-t border-black/[0.06] dark:border-white/[0.05]">
+          <span className="text-[10px] text-black/40 dark:text-white/40 uppercase tracking-wider">{t("total")}</span>
+          <span className="text-gold font-serif font-semibold text-base">{totalPrice} TND</span>
+        </div>
+      </div>
+
+      {/* Full Name */}
       <div>
-        <label className={labelClasses}>{t("fullName")}</label>
+        <label className={labelBase}>
+          <User size={11} />
+          {t("fullName")}
+        </label>
         <input
           required
           type="text"
           name="fullName"
           value={formData.fullName}
           onChange={handleChange}
-          className={inputClasses}
+          className={inputBase}
           placeholder={t("namePlaceholder")}
           autoComplete="name"
         />
       </div>
 
+      {/* Phone */}
       <div>
-        <label className={labelClasses}>{t("phoneNumber")}</label>
+        <label className={labelBase}>
+          <Phone size={11} />
+          {t("phoneNumber")}
+        </label>
         <input
           required
           type="tel"
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          className={inputClasses}
+          className={inputBase}
           placeholder={t("phonePlaceholder")}
           autoComplete="tel"
+          dir="ltr"
         />
       </div>
 
-      <div>
-        <label className={labelClasses}>{t("governorate")}</label>
-        <input
-          required
-          type="text"
-          name="governorate"
-          value={formData.governorate}
-          onChange={handleChange}
-          className={inputClasses}
-          placeholder={t("govPlaceholder")}
-          autoComplete="address-level1"
-        />
+      {/* Governorate + City row */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelBase}>
+            <MapPin size={11} />
+            {t("governorate")}
+          </label>
+          <input
+            required
+            type="text"
+            name="governorate"
+            value={formData.governorate}
+            onChange={handleChange}
+            className={inputBase}
+            placeholder={t("govPlaceholder")}
+            autoComplete="address-level1"
+          />
+        </div>
+        <div>
+          <label className={labelBase}>
+            <MapPin size={11} />
+            {t("city")}
+          </label>
+          <input
+            required
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            className={inputBase}
+            placeholder={t("cityPlaceholder")}
+            autoComplete="address-level2"
+          />
+        </div>
       </div>
 
+      {/* Note */}
       <div>
-        <label className={labelClasses}>{t("city")}</label>
-        <input
-          required
-          type="text"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          className={inputClasses}
-          placeholder={t("cityPlaceholder")}
-          autoComplete="address-level2"
-        />
-      </div>
-
-      <div>
-        <label className={labelClasses}>{t("noteOptional")}</label>
+        <label className={labelBase}>
+          <FileText size={11} />
+          {t("noteOptional")}
+        </label>
         <textarea
           name="note"
           value={formData.note}
           onChange={handleChange}
           rows={2}
-          className={`${inputClasses} resize-none`}
+          className={`${inputBase} resize-none`}
           placeholder={t("notePlaceholder")}
         />
       </div>
 
-      <div className="pt-3 border-t border-black/[0.06] dark:border-white/[0.06] mt-2">
-        <div className="flex justify-between items-baseline mb-5">
-          <span className="text-black/60 dark:text-white/60 text-sm">{t("total")}</span>
-          <span className="text-lg font-serif text-gold font-bold">{totalPrice} TND</span>
-        </div>
-        <p className="text-[11px] text-black/45 dark:text-white/45 mb-4 text-center leading-relaxed">
-          {t("codMessage")}
-        </p>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3.5 bg-gold text-white dark:text-black hover:bg-gold-dark transition duration-300 uppercase tracking-[0.15em] text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed rounded-sm hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] flex items-center justify-center gap-2"
-        >
-          {loading ? (
-            <>
-              <Loader2 size={14} className="animate-spin" />
-              {t("processing")}
-            </>
-          ) : (
-            t("completeOrder")
-          )}
-        </button>
-      </div>
+      {/* COD note */}
+      <p className="text-[11px] text-black/40 dark:text-white/40 text-center leading-relaxed py-1">
+        💵 {t("codMessage")}
+      </p>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full py-4 bg-gold text-black hover:bg-gold-dark transition-all duration-300 uppercase tracking-[0.18em] text-xs font-bold disabled:opacity-40 disabled:cursor-not-allowed rounded-sm hover:shadow-[0_6px_24px_rgba(212,175,55,0.4)] flex items-center justify-center gap-2 relative overflow-hidden group"
+      >
+        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+        {loading ? (
+          <>
+            <Loader2 size={14} className="animate-spin relative" />
+            <span className="relative">{t("processing")}</span>
+          </>
+        ) : (
+          <span className="relative">{t("completeOrder")}</span>
+        )}
+      </button>
     </form>
   );
 }
