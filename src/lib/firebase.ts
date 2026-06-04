@@ -1,5 +1,10 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+import {
+  Firestore,
+  getFirestore,
+  initializeFirestore,
+  memoryLocalCache,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,7 +18,51 @@ const firebaseConfig = {
   }),
 };
 
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-const db = getFirestore(app);
+function assertFirebaseConfig() {
+  const required = [
+    "apiKey",
+    "authDomain",
+    "projectId",
+    "storageBucket",
+    "messagingSenderId",
+    "appId",
+  ] as const;
 
-export { db };
+  const missing = required.filter((key) => !firebaseConfig[key]);
+  if (missing.length > 0) {
+    throw new Error(
+      `Firebase is not configured (${missing.join(", ")}). Add values to .env.local and restart the dev server.`
+    );
+  }
+}
+
+let app: FirebaseApp | undefined;
+let db: Firestore | undefined;
+
+function getFirebaseApp(): FirebaseApp {
+  assertFirebaseConfig();
+  if (!app) {
+    app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  }
+  return app;
+}
+
+/** Firestore client — browser only (avoids Next.js SSR hangs). */
+export function getDb(): Firestore {
+  if (typeof window === "undefined") {
+    throw new Error("Firestore is only available in the browser.");
+  }
+
+  if (!db) {
+    const firebaseApp = getFirebaseApp();
+    try {
+      db = initializeFirestore(firebaseApp, {
+        localCache: memoryLocalCache(),
+      });
+    } catch {
+      db = getFirestore(firebaseApp);
+    }
+  }
+
+  return db;
+}

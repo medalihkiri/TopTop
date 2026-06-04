@@ -63,6 +63,22 @@ export const translations: Translations = {
     ar: "تم تقديم طلبك بنجاح. جاري فتح واتساب لتأكيد الطلب...",
     fr: "Votre commande a été soumise avec succès. Ouverture de WhatsApp pour confirmer...",
   },
+  orderErrorGeneric: {
+    ar: "تعذر إرسال الطلب. تحقق من الاتصال بالإنترنت وحاول مرة أخرى.",
+    fr: "Impossible d'envoyer la commande. Vérifiez votre connexion et réessayez.",
+  },
+  orderErrorTimeout: {
+    ar: "انتهت مهلة الاتصال بقاعدة البيانات. عطّل حاجب الإعلانات أو جرّب شبكة أخرى.",
+    fr: "Délai dépassé (Firestore). Désactivez un bloqueur de pub ou changez de réseau.",
+  },
+  orderErrorConfig: {
+    ar: "إعداد Firebase غير مكتمل. أعد تشغيل الخادم بعد تحديث .env.local.",
+    fr: "Configuration Firebase incomplète. Redémarrez le serveur après .env.local.",
+  },
+  orderErrorRules: {
+    ar: "رفضت قاعدة البيانات الطلب. انشر قواعد Firestore للسماح بإنشاء orders.",
+    fr: "Firestore a refusé l'écriture. Publiez les règles autorisant create sur orders.",
+  },
   visitBoutique: { ar: "قم بزيارة متجرنا", fr: "Visitez notre boutique" },
   visitDesc: {
     ar: "عش جوهر الفخامة شخصياً. ندعوك لاكتشاف مجموعتنا المختارة.",

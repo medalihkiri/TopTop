@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
-import { db } from "@/lib/firebase";
+import { getDb } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { FirebaseError } from "firebase/app";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
 import { Check, Loader2, User, Phone, MapPin, FileText, ShoppingBag } from "lucide-react";
@@ -17,6 +18,7 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
   const { lang, t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -36,6 +38,7 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
     if (items.length === 0) return;
 
     setLoading(true);
+    setSubmitError(null);
 
     try {
       const orderData = {
@@ -52,7 +55,11 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
         createdAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, "orders"), orderData);
+      const writeOrder = addDoc(collection(getDb(), "orders"), orderData);
+      const timeout = new Promise<never>((_, reject) => {
+        window.setTimeout(() => reject(new Error("timeout")), 20000);
+      });
+      await Promise.race([writeOrder, timeout]);
 
       const itemsList = items
         .map((item) => `- ${item.quantity}x ${item.product.name[lang]} (${item.size.size}) : ${item.size.price * item.quantity} TND`)
@@ -73,8 +80,17 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
       }, 3000);
 
     } catch (error) {
-      console.error("Error submitting order: ", error);
-      alert("Something went wrong. Please try again.");
+      console.error("Error submitting order:", error);
+
+      if (error instanceof FirebaseError && error.code === "permission-denied") {
+        setSubmitError(t("orderErrorRules"));
+      } else if (error instanceof Error && error.message === "timeout") {
+        setSubmitError(t("orderErrorTimeout"));
+      } else if (error instanceof Error && error.message.includes("not configured")) {
+        setSubmitError(t("orderErrorConfig"));
+      } else {
+        setSubmitError(t("orderErrorGeneric"));
+      }
     } finally {
       setLoading(false);
     }
@@ -230,6 +246,12 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
       <p className="text-[11px] text-black/40 dark:text-white/40 text-center leading-relaxed py-1">
         💵 {t("codMessage")}
       </p>
+
+      {submitError && (
+        <p className="text-sm text-red-600 dark:text-red-400 text-center leading-relaxed px-1">
+          {submitError}
+        </p>
+      )}
 
       {/* Submit */}
       <button
