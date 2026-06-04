@@ -40,8 +40,10 @@ export default function ProductCard({ product, onClick, priority }: ProductCardP
             alt={product.name[lang]}
             fill
             priority={priority}
+            loading={priority ? "eager" : "lazy"}
+            unoptimized
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-107 opacity-90 dark:opacity-80 group-hover:opacity-100"
+            className="object-cover transition-transform duration-300 ease-out group-hover:scale-107 opacity-90 dark:opacity-80 group-hover:opacity-100"
           />
         )}
 

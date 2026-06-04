@@ -100,7 +100,9 @@ export default function PromoSpotlight({ products, onOpenModal }: PromoSpotlight
                       fill
                       sizes="(max-width: 640px) 240px, (max-width: 1024px) 270px, 300px"
                       priority={index < 3}
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 dark:opacity-85 group-hover:opacity-100"
+                      loading={index < 3 ? "eager" : "lazy"}
+                      unoptimized
+                      className="object-cover transition-transform duration-300 ease-out group-hover:scale-105 opacity-90 dark:opacity-85 group-hover:opacity-100"
                     />
                   )}
 

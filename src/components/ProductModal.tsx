@@ -121,34 +121,30 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
 
             {/* ── Image section ───────────────────────── */}
             <div className="relative w-full md:w-[45%] h-[300px] sm:h-[360px] md:h-auto md:min-h-[500px] bg-neutral-100 dark:bg-[#111] flex-shrink-0">
-              <AnimatePresence mode="wait">
-                {product.images[currentImageIndex] && (
-                  <motion.div
-                    key={currentImageIndex}
-                    initial={{ opacity: 0, scale: 1.04 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.97 }}
-                    transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="absolute inset-0"
+              {/* Render all images once; switch via opacity for instant transitions. */}
+              {product.images.map((img, idx) => {
+                const isActive = idx === currentImageIndex;
+                return (
+                  <div
+                    key={img}
+                    aria-hidden={!isActive}
+                    className={`absolute inset-0 transition-opacity duration-200 ease-out ${
+                      isActive ? "opacity-100 z-[1]" : "opacity-0 z-0 pointer-events-none"
+                    }`}
                   >
                     <Image
-                      src={product.images[currentImageIndex]}
-                      alt={product.name[lang]}
+                      src={img}
+                      alt={isActive ? product.name[lang] : ""}
                       fill
-                      priority
+                      loading="eager"
+                      unoptimized
                       sizes="(max-width: 768px) 100vw, 45vw"
+                      priority={idx === 0}
                       className="object-cover"
                     />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Preload adjacent images */}
-              <div className="hidden">
-                {product.images.map((img) => (
-                  <Image key={`preload-${img}`} src={img} alt="preload" width={1} height={1} priority />
-                ))}
-              </div>
+                  </div>
+                );
+              })}
 
               {/* Nav arrows */}
               {product.images.length > 1 && (
@@ -184,7 +180,15 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
                       }`}
                       aria-label={`Image ${idx + 1}`}
                     >
-                      <Image src={img} alt={`thumb-${idx}`} fill className="object-cover" sizes="28px" />
+                      <Image
+                        src={img}
+                        alt={`thumb-${idx}`}
+                        fill
+                        unoptimized
+                        sizes="28px"
+                        className="object-cover"
+                        loading="lazy"
+                      />
                     </button>
                   ))}
                 </div>
