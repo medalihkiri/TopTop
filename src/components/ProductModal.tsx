@@ -150,14 +150,14 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
                 <>
                   <button
                     onClick={lang === "ar" ? handleNextImage : handlePrevImage}
-                    className="absolute rtl:right-3 ltr:left-3 top-1/2 -translate-y-1/2 p-2 bg-white/85 dark:bg-black/60 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition shadow-md backdrop-blur-sm border border-black/[0.04] dark:border-white/[0.04]"
+                    className="absolute z-10 rtl:right-3 ltr:left-3 top-1/2 -translate-y-1/2 p-2 bg-white/85 dark:bg-black/60 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition shadow-md backdrop-blur-sm border border-black/[0.04] dark:border-white/[0.04]"
                     aria-label="Previous image"
                   >
                     <ChevronLeft size={17} className="rtl:rotate-180" />
                   </button>
                   <button
                     onClick={lang === "ar" ? handlePrevImage : handleNextImage}
-                    className="absolute rtl:left-3 ltr:right-3 top-1/2 -translate-y-1/2 p-2 bg-white/85 dark:bg-black/60 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition shadow-md backdrop-blur-sm border border-black/[0.04] dark:border-white/[0.04]"
+                    className="absolute z-10 rtl:left-3 ltr:right-3 top-1/2 -translate-y-1/2 p-2 bg-white/85 dark:bg-black/60 text-black dark:text-white rounded-full hover:bg-gold hover:text-white dark:hover:bg-gold dark:hover:text-black transition shadow-md backdrop-blur-sm border border-black/[0.04] dark:border-white/[0.04]"
                     aria-label="Next image"
                   >
                     <ChevronRight size={17} className="rtl:rotate-180" />
@@ -167,7 +167,7 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
 
               {/* Thumbnail strip */}
               {product.images.length > 1 && (
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 items-center">
+                <div className="absolute z-10 bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 items-center">
                   {product.images.map((img, idx) => (
                     <button
                       key={idx}

@@ -116,10 +116,10 @@ export default function Navbar() {
               <Search size={18} />
             </button>
 
-            {/* Theme & Language: hidden on mobile — available in the mobile menu drawer */}
+            {/* Theme & Language */}
             <button
               onClick={toggleTheme}
-              className="hidden md:flex p-3 text-black/55 dark:text-white/55 hover:text-gold dark:hover:text-gold transition-colors rounded-md hover:bg-gold/8"
+              className="flex p-3 text-black/55 dark:text-white/55 hover:text-gold dark:hover:text-gold transition-colors rounded-md hover:bg-gold/8"
               aria-label={theme === "dark" ? (lang === "ar" ? "الوضع النهاري" : "Mode clair") : (lang === "ar" ? "الوضع الليلي" : "Mode sombre")}
             >
               {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
@@ -127,7 +127,7 @@ export default function Navbar() {
 
             <button
               onClick={toggleLanguage}
-              className="hidden md:flex items-center gap-1 p-3 text-black/55 dark:text-white/55 hover:text-gold dark:hover:text-gold transition-colors rounded-md hover:bg-gold/8"
+              className="flex items-center gap-1 p-3 text-black/55 dark:text-white/55 hover:text-gold dark:hover:text-gold transition-colors rounded-md hover:bg-gold/8"
               aria-label={lang === "ar" ? "Passer en français" : "التبديل للعربية"}
             >
               <Globe size={16} />
@@ -189,57 +189,18 @@ export default function Navbar() {
                 </motion.button>
               ))}
 
-              {/* Mobile shortcuts: Search | Cart | Lang | Theme */}
-              <motion.div
+              {/* Explicit Close Button */}
+              <motion.button
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ delay: 0.25 }}
-                className="flex items-center gap-4 mt-8 pt-6"
+                transition={{ delay: 0.2 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="mt-8 flex items-center gap-2 px-6 py-3 bg-black/5 dark:bg-white/5 text-black/60 dark:text-white/60 hover:bg-black/10 dark:hover:bg-white/10 hover:text-black dark:hover:text-white rounded-full transition-all text-sm font-medium tracking-wide uppercase"
               >
-                <button
-                  onClick={openSearch}
-                  className="flex flex-col items-center gap-1.5 p-2 text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors"
-                  aria-label={lang === "ar" ? "بحث" : "Rechercher"}
-                >
-                  <Search size={22} />
-                  <span className="text-[9px] uppercase tracking-[0.15em]">{t("search")}</span>
-                </button>
-                <div className="w-px h-10 bg-black/10 dark:bg-white/10" />
-                <button
-                  onClick={() => { setIsMobileMenuOpen(false); setTimeout(() => setIsCartOpen(true), 200); }}
-                  className="flex flex-col items-center gap-1.5 p-2 text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors relative"
-                  aria-label={lang === "ar" ? "سلة المشتريات" : "Panier"}
-                >
-                  <ShoppingBag size={22} />
-                  {totalItems > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-gold text-black text-[9px] font-bold rounded-full flex items-center justify-center">
-                      {totalItems}
-                    </span>
-                  )}
-                  <span className="text-[9px] uppercase tracking-[0.15em]">{t("yourCart")}</span>
-                </button>
-                <div className="w-px h-10 bg-black/10 dark:bg-white/10" />
-                <button
-                  onClick={toggleLanguage}
-                  className="flex flex-col items-center gap-1.5 p-2 text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors"
-                  aria-label={lang === "ar" ? "Passer en français" : "التبديل للعربية"}
-                >
-                  <Globe size={22} />
-                  <span className="text-[9px] uppercase tracking-[0.15em]">{lang === "ar" ? "FR" : "AR"}</span>
-                </button>
-                <div className="w-px h-10 bg-black/10 dark:bg-white/10" />
-                <button
-                  onClick={toggleTheme}
-                  className="flex flex-col items-center gap-1.5 p-2 text-black/50 dark:text-white/50 hover:text-gold dark:hover:text-gold transition-colors"
-                  aria-label={theme === "dark" ? (lang === "ar" ? "الوضع النهاري" : "Mode clair") : (lang === "ar" ? "الوضع الليلي" : "Mode sombre")}
-                >
-                  {theme === "dark" ? <Sun size={22} /> : <Moon size={22} />}
-                  <span className="text-[9px] uppercase tracking-[0.15em]">
-                    {theme === "dark" ? (lang === "ar" ? "نهاري" : "Clair") : (lang === "ar" ? "ليلي" : "Sombre")}
-                  </span>
-                </button>
-              </motion.div>
+                <X size={18} />
+                {lang === "ar" ? "إغلاق" : "Fermer"}
+              </motion.button>
             </div>
           </motion.div>
         )}
