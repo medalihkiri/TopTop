@@ -30,6 +30,8 @@
 
 * {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* eliminates 300ms delay on iOS — safe for all interactive elements */
+  box-sizing: border-box;
 }
 
 html {
@@ -103,7 +105,6 @@ img {
 button:active:not(:disabled),
 a:active {
   transform: scale(0.97) translateZ(0);
-  will-change: transform;
 }
 
 /* ─── Keyframes ─────────────────────────────────── */

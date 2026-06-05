@@ -12,7 +12,7 @@ interface ProductCatalogueProps {
 
 export default function ProductCatalogue({ onOpenModal }: ProductCatalogueProps) {
   const [activeCategory, setActiveCategory] = useState<"Men" | "Women">("Women");
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   const filteredProducts = products.filter((p) => p.category === activeCategory || p.category === "Unisex");
 
@@ -23,7 +23,7 @@ export default function ProductCatalogue({ onOpenModal }: ProductCatalogueProps)
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">
           <p className="text-[10px] uppercase tracking-[0.35em] text-gold/70 mb-3">
-            {t("exclusiveOffers")}
+            {lang === "ar" ? "كل المقاسات متاحة" : "Toutes tailles disponibles"}
           </p>
           <h2 className="text-3xl md:text-4xl font-serif text-black dark:text-white-warm mb-8">
             {t("ourCollection")}
@@ -48,7 +48,10 @@ export default function ProductCatalogue({ onOpenModal }: ProductCatalogueProps)
 
           {/* Product count */}
           <p className="text-[10px] text-black/30 dark:text-white/30 mt-4 tracking-wide">
-            {filteredProducts.length} {filteredProducts.length === 1 ? "produit" : "produits"}
+            {filteredProducts.length}{" "}
+            {lang === "ar"
+              ? filteredProducts.length === 1 ? "منتج" : "منتجات"
+              : filteredProducts.length === 1 ? "produit" : "produits"}
           </p>
         </div>
 

@@ -31,7 +31,8 @@ function assertFirebaseConfig() {
   const missing = required.filter((key) => !firebaseConfig[key]);
   if (missing.length > 0) {
     throw new Error(
-      `Firebase is not configured (${missing.join(", ")}). Add values to .env.local and restart the dev server.`
+      `Firebase is not configured (missing: ${missing.join(", ")}). ` +
+        `Locally: .env.local + restart dev. On Vercel: Project Settings → Environment Variables, then redeploy.`
     );
   }
 }

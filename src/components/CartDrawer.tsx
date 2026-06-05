@@ -168,8 +168,8 @@ export default function CartDrawer() {
                                 </div>
                                 <button
                                   onClick={() => removeItem(item.id)}
-                                  className="flex-shrink-0 p-1 text-black/25 dark:text-white/25 hover:text-red-500 dark:hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
-                                  aria-label="Remove item"
+                                  className="flex-shrink-0 p-1.5 text-black/25 dark:text-white/25 hover:text-red-500 dark:hover:text-red-400 transition-colors sm:opacity-0 sm:group-hover:opacity-100"
+                                  aria-label={lang === "ar" ? "حذف المنتج" : "Supprimer l'article"}
                                 >
                                   <Trash2 size={13} />
                                 </button>
@@ -211,7 +211,10 @@ export default function CartDrawer() {
 
                 {/* Footer */}
                 {items.length > 0 && (
-                  <div className="px-5 py-5 border-t border-black/[0.06] dark:border-white/[0.06] flex-shrink-0 bg-neutral-50/60 dark:bg-white/[0.015]">
+                  <div
+                    className="px-5 pt-5 border-t border-black/[0.06] dark:border-white/[0.06] flex-shrink-0 bg-neutral-50/60 dark:bg-white/[0.015]"
+                    style={{ paddingBottom: 'max(1.25rem, env(safe-area-inset-bottom))' }}
+                  >
                     {/* Subtotal */}
                     <div className="flex justify-between items-baseline mb-4">
                       <span className="text-black/55 dark:text-white/50 uppercase tracking-[0.15em] text-[10px]">

@@ -27,7 +27,7 @@ export default function Footer() {
                 للـعطور
               </span>
             </div>
-            <p className="text-black/50 dark:text-white/40 text-xs font-light leading-relaxed max-w-[200px] text-center md:text-start">
+            <p className="text-black/50 dark:text-white/40 text-xs font-light leading-relaxed max-w-[200px] text-center md:text-left">
               {t("footerDesc")}
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function Footer() {
           </div>
 
           {/* WhatsApp CTA */}
-          <div className={`flex flex-col gap-3 ${lang === "ar" ? "items-end" : "items-center md:items-end"}`}>
+          <div className={`flex flex-col gap-3 items-center ${lang === "ar" ? "md:items-start" : "md:items-end"}`}>
             <p className="text-[9px] uppercase tracking-[0.3em] text-black/35 dark:text-white/30 mb-1">
               {lang === "ar" ? "تواصل معنا" : "Contactez-nous"}
             </p>
@@ -61,13 +61,14 @@ export default function Footer() {
               href="https://wa.me/21699336444"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium rounded-full transition-all duration-200 border border-emerald-500/20 hover:border-emerald-500/40"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-semibold rounded-full shadow-md shadow-[#25D366]/20 hover:shadow-[#25D366]/40 hover:-translate-y-0.5 transition-all duration-300"
+              dir={lang === "ar" ? "rtl" : "ltr"}
             >
-              <MessageCircle size={14} />
+              <MessageCircle size={15} />
               WhatsApp
             </a>
             <p
-              className={`text-[10px] text-black/35 dark:text-white/30 ${lang === "ar" ? "text-right" : ""}`}
+              className="text-[11px] font-medium text-black/60 dark:text-white/50 tracking-wide mt-1"
               dir="ltr"
             >
               +216 99 336 444
@@ -83,7 +84,10 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div
+          className="py-5 flex flex-col sm:flex-row items-center justify-between gap-2"
+          style={{ paddingBottom: 'max(1.25rem, env(safe-area-inset-bottom))' }}
+        >
           <p className="text-black/40 dark:text-white/30 text-[10px] text-center" dir="ltr">
             © {new Date().getFullYear()} TOP TOP Perfumes. {t("rights")}
           </p>

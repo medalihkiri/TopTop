@@ -137,7 +137,6 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
                       alt={isActive ? product.name[lang] : ""}
                       fill
                       loading="eager"
-                      unoptimized
                       sizes="(max-width: 768px) 100vw, 45vw"
                       priority={idx === 0}
                       className="object-cover"
@@ -184,7 +183,6 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
                         src={img}
                         alt={`thumb-${idx}`}
                         fill
-                        unoptimized
                         sizes="28px"
                         className="object-cover"
                         loading="lazy"
@@ -308,7 +306,10 @@ export default function ProductModal({ product: incomingProduct, isOpen, onClose
               </div>
 
               {/* Sticky CTA */}
-              <div className="sticky bottom-0 px-5 md:px-7 py-4 bg-white/97 dark:bg-[#0d0d0d]/97 backdrop-blur-sm border-t border-black/[0.05] dark:border-white/[0.04] flex gap-3">
+              <div
+                className="sticky bottom-0 px-5 md:px-7 pt-4 bg-white/97 dark:bg-[#0d0d0d]/97 backdrop-blur-sm border-t border-black/[0.05] dark:border-white/[0.04] flex gap-3"
+                style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+              >
                 <button
                   onClick={handleAddToCart}
                   className={`flex-1 py-3.5 text-xs uppercase tracking-[0.15em] font-semibold transition-all duration-300 rounded-sm flex items-center justify-center gap-2 border ${

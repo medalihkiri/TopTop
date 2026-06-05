@@ -38,7 +38,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-br from-white/70 via-white/60 to-transparent dark:from-black/80 dark:via-black/60 dark:to-transparent z-10 transition-colors duration-500" />
         <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/30 dark:from-black dark:via-transparent dark:to-black/20 z-10 transition-colors duration-500" />
         <Image
-          src="/images/femme ysl libre (1).webp"
+          src="/images/hero.webp"
           alt="Luxury Perfume"
           fill
           className="object-cover object-center opacity-25 dark:opacity-45 mix-blend-multiply dark:mix-blend-normal"

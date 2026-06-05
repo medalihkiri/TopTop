@@ -45,7 +45,7 @@ export const translations: Translations = {
   continueShopping: { ar: "مواصلة التسوق", fr: "Continuer les achats" },
   subtotal: { ar: "المجموع الفرعي", fr: "Sous-total" },
   proceedToCheckout: { ar: "متابعة إتمام الطلب", fr: "Passer à la caisse" },
-  backToCart: { ar: "← العودة للسلة", fr: "← Retour au panier" },
+  backToCart: { ar: "← العودة للسلة", fr: "Retour au panier →" },
   fullName: { ar: "الاسم الكامل", fr: "Nom complet" },
   phoneNumber: { ar: "رقم الهاتف", fr: "Numéro de téléphone" },
   governorate: { ar: "الولاية", fr: "Gouvernorat" },
@@ -60,8 +60,28 @@ export const translations: Translations = {
   processing: { ar: "جاري المعالجة...", fr: "Traitement en cours..." },
   orderReceived: { ar: "تم استلام الطلب!", fr: "Commande Reçue !" },
   orderSuccessMsg: {
-    ar: "تم تقديم طلبك بنجاح. جاري فتح واتساب لتأكيد الطلب...",
-    fr: "Votre commande a été soumise avec succès. Ouverture de WhatsApp pour confirmer...",
+    ar: "تم تسجيل طلبك بنجاح. سنتصل بك قريباً لتأكيد التفاصيل والتوصيل.",
+    fr: "Votre commande est enregistrée. Nous vous appellerons très bientôt pour confirmer les détails.",
+  },
+  orderSuccessPhoneLabel: {
+    ar: "رقم الاتصال",
+    fr: "Numéro de rappel",
+  },
+  whatsappOptionalTitle: {
+    ar: "تريد تأكيداً أسرع؟",
+    fr: "Confirmation plus rapide ?",
+  },
+  whatsappOptionalDesc: {
+    ar: "أرسل نفس الطلب على واتساب — اختياري، لكنه يسرّع المعالجة.",
+    fr: "Envoyez la même commande sur WhatsApp — optionnel, mais plus rapide.",
+  },
+  sendOrderWhatsApp: {
+    ar: "إرسال الطلب على واتساب",
+    fr: "Envoyer la commande sur WhatsApp",
+  },
+  orderDoneShopping: {
+    ar: "متابعة التسوق",
+    fr: "Continuer mes achats",
   },
   orderErrorGeneric: {
     ar: "تعذر إرسال الطلب. تحقق من الاتصال بالإنترنت وحاول مرة أخرى.",
@@ -72,8 +92,8 @@ export const translations: Translations = {
     fr: "Délai dépassé (Firestore). Désactivez un bloqueur de pub ou changez de réseau.",
   },
   orderErrorConfig: {
-    ar: "إعداد Firebase غير مكتمل. أعد تشغيل الخادم بعد تحديث .env.local.",
-    fr: "Configuration Firebase incomplète. Redémarrez le serveur après .env.local.",
+    ar: "متغيرات Firebase غير موجودة على Vercel. أضف NEXT_PUBLIC_FIREBASE_* في إعدادات المشروع ثم أعد النشر (Redeploy).",
+    fr: "Variables Firebase absentes sur Vercel. Ajoutez NEXT_PUBLIC_FIREBASE_* dans Settings → Environment Variables, puis Redeploy.",
   },
   orderErrorRules: {
     ar: "رفضت قاعدة البيانات الطلب. انشر قواعد Firestore للسماح بإنشاء orders.",

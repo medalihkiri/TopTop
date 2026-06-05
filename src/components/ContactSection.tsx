@@ -27,9 +27,9 @@ export default function ContactSection() {
       icon: <Phone size={18} />,
       title: t("phoneWhatsApp"),
       content: (
-        <div className={`flex flex-col gap-2 ${lang === "ar" ? "items-end" : ""}`}>
+        <div className={`flex flex-col gap-3 ${lang === "ar" ? "items-start md:items-start" : "items-start"}`}>
           <p
-            className={`text-black/60 dark:text-white/55 font-light text-sm ${lang === "ar" ? "text-right" : ""}`}
+            className="text-black/80 dark:text-white/80 font-medium text-base tracking-wide"
             dir="ltr"
           >
             +216 99 336 444
@@ -38,9 +38,10 @@ export default function ContactSection() {
             href="https://wa.me/21699336444"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 transition-colors bg-emerald-500/8 hover:bg-emerald-500/15 px-3 py-1.5 rounded-full w-fit"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-white bg-[#25D366] hover:bg-[#20bd5a] transition-all shadow-md shadow-[#25D366]/20 hover:shadow-[#25D366]/40 hover:-translate-y-0.5 px-4 py-2.5 rounded-full w-fit"
+            dir={lang === "ar" ? "rtl" : "ltr"}
           >
-            <MessageCircle size={13} />
+            <MessageCircle size={15} />
             {t("whatsappUs")}
           </a>
         </div>
@@ -128,10 +129,10 @@ export default function ContactSection() {
                       href="https://www.instagram.com/toptop.parfums/?hl=fr"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-3.5 py-2 bg-neutral-100 dark:bg-white/[0.05] text-black/55 dark:text-white/55 hover:text-gold dark:hover:text-gold hover:bg-gold/10 dark:hover:bg-gold/10 hover:border-gold/30 border border-black/[0.05] dark:border-white/[0.05] transition-all rounded-sm text-[11px] font-medium"
+                      className="flex-1 flex justify-center items-center gap-2 px-4 py-2.5 bg-white dark:bg-[#0a0a0a] text-black/70 dark:text-white/70 hover:text-gold dark:hover:text-gold hover:border-gold/50 border border-black/10 dark:border-white/10 shadow-sm transition-all rounded-md text-[11px] font-semibold"
                       aria-label="Instagram"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -140,10 +141,10 @@ export default function ContactSection() {
                     </a>
                     <a
                       href="#"
-                      className="flex items-center gap-2 px-3.5 py-2 bg-neutral-100 dark:bg-white/[0.05] text-black/55 dark:text-white/55 hover:text-gold dark:hover:text-gold hover:bg-gold/10 dark:hover:bg-gold/10 hover:border-gold/30 border border-black/[0.05] dark:border-white/[0.05] transition-all rounded-sm text-[11px] font-medium"
+                      className="flex-1 flex justify-center items-center gap-2 px-4 py-2.5 bg-white dark:bg-[#0a0a0a] text-black/70 dark:text-white/70 hover:text-gold dark:hover:text-gold hover:border-gold/50 border border-black/10 dark:border-white/10 shadow-sm transition-all rounded-md text-[11px] font-semibold"
                       aria-label="Facebook"
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                       </svg>
                       Facebook
@@ -170,14 +171,14 @@ export default function ContactSection() {
               aria-label="Open in Google Maps"
             />
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d102195.42436894565!2d10.100918029517173!3d36.7949999081534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd337f5e7ef543%3A0xd671924e714a0275!2sTunis!5e0!3m2!1sen!2stn!4v1700000000000!5m2!1sen!2stn"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3191.234!2d9.8735!3d37.2746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12e2e41a7bffffff%3A0x1!2sRue%202%20Mars%2C%20Bizerte%207000%2C%20Tunisie!5e0!3m2!1sfr!2stn!4v1700000000000!5m2!1sfr!2stn"
               width="100%"
               height="100%"
               style={{ border: 0, filter: "grayscale(1) contrast(1.08) opacity(0.75)", pointerEvents: "none" }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Store location"
+              title="TOP TOP Parfums — Hela Centre, Rue 2 Mars, Bizerte"
               className="transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-90"
             ></iframe>
 

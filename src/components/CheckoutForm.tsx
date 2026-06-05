@@ -7,7 +7,17 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
-import { Check, Loader2, User, Phone, MapPin, FileText, ShoppingBag } from "lucide-react";
+import {
+  Check,
+  Loader2,
+  User,
+  Phone,
+  MapPin,
+  FileText,
+  ShoppingBag,
+  MessageCircle,
+  PhoneCall,
+} from "lucide-react";
 
 interface CheckoutFormProps {
   onComplete: () => void;
@@ -18,6 +28,8 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
   const { lang, t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successWhatsappUrl, setSuccessWhatsappUrl] = useState<string | null>(null);
+  const [confirmedPhone, setConfirmedPhone] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -70,14 +82,10 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
       const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "21699336444";
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
+      setConfirmedPhone(formData.phone);
+      setSuccessWhatsappUrl(whatsappUrl);
       setSuccess(true);
       clearCart();
-
-      window.open(whatsappUrl, "_blank");
-
-      setTimeout(() => {
-        onComplete();
-      }, 3000);
 
     } catch (error) {
       console.error("Error submitting order:", error);
@@ -99,25 +107,97 @@ export default function CheckoutForm({ onComplete }: CheckoutFormProps) {
   if (success) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.92 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ ease: [0.22, 1, 0.36, 1] }}
-        className="flex flex-col items-center justify-center py-16 text-center gap-5"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ease: [0.22, 1, 0.36, 1], duration: 0.45 }}
+        className="flex flex-col gap-5 py-4"
       >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.1, type: "spring", stiffness: 400, damping: 20 }}
-          className="w-16 h-16 rounded-full bg-gold/15 border border-gold/25 flex items-center justify-center"
-        >
-          <Check className="text-gold" size={26} />
-        </motion.div>
-        <div>
-          <h3 className="text-xl font-serif text-gold mb-2">{t("orderReceived")}</h3>
-          <p className="text-black/55 dark:text-white/50 text-sm leading-relaxed max-w-xs">
+        {/* Confirmation */}
+        <div className="text-center px-1">
+          <motion.div
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 380, damping: 22, delay: 0.05 }}
+            className="relative mx-auto w-[4.5rem] h-[4.5rem] mb-5"
+          >
+            <span className="absolute inset-0 rounded-full bg-gold/20 animate-ping opacity-40" />
+            <span className="absolute inset-1 rounded-full bg-gold/10 border border-gold/30" />
+            <span className="relative flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-gold/25 to-gold/10 border border-gold/40 shadow-[0_8px_32px_rgba(212,175,55,0.25)]">
+              <Check className="text-gold" size={28} strokeWidth={2.5} />
+            </span>
+          </motion.div>
+
+          <h3 className="text-xl md:text-2xl font-serif text-gold mb-2 tracking-wide">
+            {t("orderReceived")}
+          </h3>
+          <p className="text-sm text-black/65 dark:text-white/60 leading-relaxed max-w-[18rem] mx-auto">
             {t("orderSuccessMsg")}
           </p>
+
+          {confirmedPhone && (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mt-4 inline-flex items-center gap-2.5 rounded-full border border-gold/25 bg-gold/[0.07] px-4 py-2"
+            >
+              <PhoneCall size={15} className="text-gold shrink-0" />
+              <div className="text-start">
+                <p className="text-[9px] uppercase tracking-[0.18em] text-black/45 dark:text-white/45">
+                  {t("orderSuccessPhoneLabel")}
+                </p>
+                <p className="text-sm font-medium text-black dark:text-white tabular-nums" dir="ltr">
+                  {confirmedPhone}
+                </p>
+              </div>
+            </motion.div>
+          )}
         </div>
+
+        {/* Optional WhatsApp */}
+        {successWhatsappUrl && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28 }}
+            className="rounded-sm border border-black/[0.08] dark:border-white/[0.08] bg-neutral-50/90 dark:bg-white/[0.03] p-4 shadow-sm"
+          >
+            <div className="flex items-start gap-3 mb-4">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/15 text-[#25D366]">
+                <MessageCircle size={18} />
+              </span>
+              <div className="text-start min-w-0">
+                <p className="text-sm font-semibold text-black dark:text-white leading-snug">
+                  {t("whatsappOptionalTitle")}
+                </p>
+                <p className="text-xs text-black/55 dark:text-white/50 mt-1 leading-relaxed">
+                  {t("whatsappOptionalDesc")}
+                </p>
+              </div>
+            </div>
+
+            <a
+              href={successWhatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex w-full items-center justify-center gap-2.5 rounded-sm bg-[#25D366] px-4 py-3.5 text-sm font-bold text-white shadow-[0_4px_20px_rgba(37,211,102,0.35)] transition-all duration-300 hover:bg-[#20BD5A] hover:shadow-[0_6px_28px_rgba(37,211,102,0.45)] active:scale-[0.98]"
+            >
+              <MessageCircle size={18} className="shrink-0" />
+              <span>{t("sendOrderWhatsApp")}</span>
+            </a>
+          </motion.div>
+        )}
+
+        <motion.button
+          type="button"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.38 }}
+          onClick={onComplete}
+          className="w-full py-3.5 text-xs uppercase tracking-[0.16em] text-black/55 dark:text-white/50 border border-black/10 dark:border-white/10 rounded-sm hover:border-gold/40 hover:text-gold dark:hover:text-gold transition-colors duration-200"
+        >
+          {t("orderDoneShopping")}
+        </motion.button>
       </motion.div>
     );
   }
